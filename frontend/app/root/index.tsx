@@ -1,5 +1,6 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { Link } from "expo-router"
 
 export default function Index() {
   return (
@@ -10,7 +11,7 @@ export default function Index() {
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
         <View style={{ zIndex: 2, marginBottom: -17 }}>
           <Image
-            source={require("../assets/images/penguin.png")}
+            source={require("../../assets/images/penguin.png")}
             style={{ width: 120, height: 120, resizeMode: "contain" }}
           />
         </View>
@@ -65,9 +66,10 @@ export default function Index() {
           padding: 10,
         }}
       >
-        <Text style={{ fontSize: 18, fontWeight: "bold", color: "#000" }}>
-          NEXT
-        </Text>
+       <Link href="/root/tabs/form"> 
+  <Text style={{ fontSize: 18, fontWeight: "bold", color: "#000" }}>NEXT</Text>
+</Link>
+
       </TouchableOpacity>
     </LinearGradient>
   );
