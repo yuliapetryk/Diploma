@@ -1,132 +1,223 @@
 import { useEffect, useState } from "react";
-import { View, Text, TextInput, Image, TouchableOpacity, Platform, Keyboard } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Image,
+  TouchableOpacity,
+  Platform,
+  Keyboard,
+  Alert,
+  ScrollView,
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { KeyboardAvoidingView, TouchableWithoutFeedback } from "react-native";
-import { Ionicons } from "@expo/vector-icons"; // Icon for microphone button
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import i18n from "../../localization"; 
+
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+} from "react-native-reanimated";
 
 export default function FormScreen() {
-  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+  const [text, setText] = useState("");
+  const router = useRouter();
+
+  const penguinSize = useSharedValue(120);
 
   useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener("keyboardDidShow", () => setKeyboardVisible(true));
-    const keyboardDidHideListener = Keyboard.addListener("keyboardDidHide", () => setKeyboardVisible(false));
+    const showEvent = Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow";
+    const hideEvent = Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide";
+
+    const showSub = Keyboard.addListener(showEvent, () => {
+      penguinSize.value = withTiming(60, { duration: 300 });
+    });
+
+    const hideSub = Keyboard.addListener(hideEvent, () => {
+      penguinSize.value = withTiming(120, { duration: 300 });
+    });
 
     return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
+      showSub.remove();
+      hideSub.remove();
     };
   }, []);
 
+  const animatedPenguinStyle = useAnimatedStyle(() => ({
+    width: penguinSize.value,
+    height: penguinSize.value,
+  }));
+
+  const handleSubmit = () => {
+    if (!text.trim()) {
+      Alert.alert(i18n.t("alert_empty_title"), i18n.t("alert_empty_message"));
+      return;
+    }
+    Alert.alert(i18n.t("alert_success_title"), text);
+    setText("");
+    Keyboard.dismiss();
+  };
+
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1 }}
-    >
+    <LinearGradient colors={["#b7f5e3", "#798bd0"]} style={{ flex: 1 }}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <LinearGradient
-          colors={["#b7f5e3", "#798bd0"]}
-          style={{ flex: 1, alignItems: "center", paddingVertical: 40 }}
-        >
-          {/* Penguin Image */}
-          <View style={{ alignItems: "center", marginBottom: 10 }}>
-            <Image
-              source={require("../../../assets/images/penguin_form.png")}
-              style={{ width: 120, height: 120, resizeMode: "contain" }}
-            />
-          </View>
-
-          {/* Question Text */}
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: "600",
-              textAlign: "center",
-              color: "#000",
-              marginBottom: 10,
-              textTransform: "uppercase",
-              letterSpacing: 1,
-            }}
+        <View style={{ flex: 1 }}>
+          <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
           >
-            HOW TO OVERCOME INTERVIEW FEAR?
-          </Text>
+            <ScrollView
+              contentContainerStyle={{
+                flexGrow: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                paddingHorizontal: 20,
+                paddingBottom: 20,
+              }}
+              keyboardShouldPersistTaps="handled"
+            >
+              <Animated.Image
+                source={require("../../../assets/images/penguin_form.png")}
+                style={[
+                  {
+                    resizeMode: "contain",
+                    marginBottom: 20,
+                  },
+                  animatedPenguinStyle,
+                ]}
+              />
 
-          {/* Form Container */}
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: "600",
+                  textAlign: "center",
+                  color: "#000",
+                  marginBottom: 10,
+                  textTransform: "uppercase",
+                  letterSpacing: 1,
+                  fontFamily: "Montserrat_600SemiBold",
+                }}
+              >
+                {i18n.t("greeting_form")}
+              </Text>
+
+              <Text
+                style={{
+                  fontSize: 12,
+                  fontWeight: "300",
+                  textAlign: "center",
+                  color: "#000",
+                  marginBottom: 10,
+                  textTransform: "uppercase",
+                  letterSpacing: 1,
+                  fontFamily: "Montserrat_400Regular",
+                }}
+              >
+                {i18n.t("description_form")}
+              </Text>
+
+              <View
+                style={{
+                  backgroundColor: "rgba(255, 255, 255, 0.3)",
+                  padding: 5,
+                  borderRadius: 30,
+                  width: "100%",
+                  maxWidth: 400,
+                  height: 200,
+                  justifyContent: "center",
+                }}
+              >
+                <TextInput
+                  placeholder={i18n.t("placeholder")}
+                  placeholderTextColor="#555"
+                  multiline
+                  textAlignVertical="top"
+                  value={text}
+                  onChangeText={setText}
+                  style={{
+                    borderRadius: 30,
+                    padding: 15,
+                    height: "100%",
+                    fontSize: 14,
+                    color: "#000",
+                    fontFamily: "Montserrat_400Regular",
+                  }}
+                />
+              </View>
+            </ScrollView>
+          </KeyboardAvoidingView>
+
           <View
             style={{
-              backgroundColor: "rgba(255, 255, 255, 0.3)",
-              padding: 20,
-              borderRadius: 30,
-              width: 350,
-              height: isKeyboardVisible ? "40%" : "50%",
+              width: "90%",
+              maxWidth: 400,
+              height: 70,
+              borderRadius: 40,
+              flexDirection: "row",
+              justifyContent: "space-between",
               alignItems: "center",
-              justifyContent: "center",
-              elevation: 10,
-              shadowColor: "#000",
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.2,
-              shadowRadius: 5,
+              paddingHorizontal: 15,
+              alignSelf: "center",
+              marginBottom: 40,
+              gap: 10,
             }}
           >
-            <TextInput
-              placeholder="Type here..."
-              multiline
-              textAlignVertical="top"
+            <TouchableOpacity
               style={{
-                width: "100%",
-                height: "100%",
-                backgroundColor: "white",
-                borderRadius: 10,
-                paddingHorizontal: 15,
-                fontSize: 16,
-                color: "#000",
-                elevation: 5,
+                flex: 1,
+                height: 50,
+                borderRadius: 25,
+                justifyContent: "center",
+                alignItems: "center",
               }}
-            />
-          </View>
+              onPress={() => router.back()}
+            >
+              <Ionicons name="arrow-back" size={24} color="black" />
+            </TouchableOpacity>
 
-          {/* Microphone & Back Button */}
-          {!isKeyboardVisible && (
-            <View
+            <TouchableOpacity
+              onPress={handleSubmit}
+              disabled={text.trim().length === 0}
               style={{
-                flexDirection: "row",
-                width: "90%",
-                justifyContent: "space-between",
-                position: "absolute",
-                bottom: 30,
+                flex: 2,
+                height: 50,
+                borderRadius: 25,
+                justifyContent: "center",
                 alignItems: "center",
               }}
             >
-              {/* Back Button */}
-              <TouchableOpacity
+              <Text
                 style={{
-                  width: 60,
-                  height: 60,
-                  backgroundColor: "#5661b3",
-                  borderRadius: 30,
-                  alignItems: "center",
-                  justifyContent: "center",
+                  color: text.trim().length === 0 ? "transparent" : "#000",
+                  fontSize: 18,
+                  fontFamily: "Montserrat_600SemiBold",
                 }}
               >
-                <Ionicons name="arrow-back" size={28} color="white" />
-              </TouchableOpacity>
+                {i18n.t("submit")}
+              </Text>
+            </TouchableOpacity>
 
-              {/* Microphone Button */}
-              <TouchableOpacity
-                style={{
-                  width: 60,
-                  height: 60,
-                  backgroundColor: "#6cd68b",
-                  borderRadius: 30,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Ionicons name="mic" size={28} color="white" />
-              </TouchableOpacity>
-            </View>
-          )}
-        </LinearGradient>
+            <TouchableOpacity
+              style={{
+                flex: 1,
+                height: 50,
+                borderRadius: 25,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onPress={() => console.log("Voice pressed")}
+            >
+              <Ionicons name="mic" size={24} color="black" />
+            </TouchableOpacity>
+          </View>
+        </View>
       </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+    </LinearGradient>
   );
 }
