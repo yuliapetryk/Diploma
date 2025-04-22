@@ -23,8 +23,13 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
+import axios from "axios";
+
 export default function FormScreen() {
   const [text, setText] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState("");
+
   const router = useRouter();
 
   const penguinSize = useSharedValue(120);
@@ -52,15 +57,39 @@ export default function FormScreen() {
     height: penguinSize.value,
   }));
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!text.trim()) {
-      Alert.alert(i18n.t("alert_empty_title"), i18n.t("alert_empty_message"));
       return;
     }
-    Alert.alert(i18n.t("alert_success_title"), text);
-    setText("");
-    Keyboard.dismiss();
+  
+    setLoading(true);
+    setLoadingMessage("Wait, we are analysing your status...");
+  
+    try {
+      const response = await axios.post("http://192.168.1.104:5000/api/analyze", {
+        text: text.trim(),
+      });
+  
+      const result = response.data?.result || response.data?.message || "No response.";
+  
+      setText("");
+      Keyboard.dismiss();
+      setLoading(false);
+      setLoadingMessage("");
+  
+      router.push({
+        pathname: "/root/tabs/advice",
+        params: { result },
+      });
+  
+    } catch (error) {
+      console.error("Submission error:", error);
+      setLoading(false);
+      setLoadingMessage("Failed to send. Please try again.");
+    }
   };
+  
+  
 
   return (
     <LinearGradient colors={["#b7f5e3", "#798bd0"]} style={{ flex: 1 }}>
@@ -150,6 +179,20 @@ export default function FormScreen() {
                   }}
                 />
               </View>
+              {loadingMessage ? (
+  <Text
+    style={{
+      marginTop: 20,
+      fontSize: 14,
+      fontStyle: "italic",
+      color: "#333",
+      textAlign: "center",
+    }}
+  >
+    {loadingMessage}
+  </Text>
+) : null}
+
             </ScrollView>
           </KeyboardAvoidingView>
 
