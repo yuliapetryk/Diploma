@@ -79,7 +79,7 @@ export default function FormScreen() {
   
       router.push({
         pathname: "/root/tabs/advice",
-        params: { result },
+        params: { result: JSON.stringify(result) },
       });
   
     } catch (error) {
