@@ -9,6 +9,11 @@ class UserCreate(BaseModel):
     name: str
     sex: str
 
+from pydantic import BaseModel, EmailStr
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
 
 class UserOut(BaseModel):
     id: str
