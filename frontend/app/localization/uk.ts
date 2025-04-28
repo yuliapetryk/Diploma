@@ -9,5 +9,19 @@ export default {
     alert_empty_title: "Пусте поле",
     alert_empty_message: "Будь ласка, напиши щось перед відправкою.",
     alert_success_title: "Відправлено!",
+    log_in: "Увійти",
+    sign_in: "Вхід",
+    email: "Пошта",
+    password: "Пароль",
+    login: "Увійти",
+    invalid_email_or_password: "Мені прикро, але ви ввели неправильниу пошту або пароль",
+    enter_email: "Будь ласка, введіть свою пошту",
+    create_account: "Створити акаунт",
+    name: "Ім'я",
+    continue: "Продовжити",
+    register: "Зареєструватися",
+    error_checking_email: "Помилка перевірки пошти. Спробуйте ще раз.",
+    error_registering: "Помилка створення акаунту. Спробуйте ще раз."
+    
   };
   

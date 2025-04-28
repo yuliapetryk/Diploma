@@ -89,6 +89,25 @@ export default function Index() {
             </Text>
           </TouchableOpacity>
         </Link>
+        <Link href="/root/tabs/sign-in" asChild>
+          <TouchableOpacity
+            style={{
+              paddingVertical: 14,
+              paddingHorizontal: 50,
+              borderRadius: 30,
+              elevation: 4,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 16,
+                fontFamily: "Montserrat_500Medium",
+              }}
+            >
+              {i18n.t("log_in")}
+            </Text>
+          </TouchableOpacity>
+        </Link>
       </View>
     </LinearGradient>
   );
