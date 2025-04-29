@@ -1,5 +1,6 @@
 export default {
-    greeting: "Hey!\nHow are you?",
+    greeting: "Hey!",
+    greeting_question: "How are you?",
     description: "You're in a safe space where no one will judge you.\nTell us what's on your mind — we're here to listen and help.",
     next: "CONTINUE",
     greeting_form: "Describe your mood, \nthoughts or worries",
@@ -27,6 +28,7 @@ export default {
     female: "female",
     other: "other",
     enter_password: "Please, enter password",
-    forgot_password: "forgot password?"
+    forgot_password: "forgot password?",
+    invalid_email: "Please, input correct email"
   };
   
