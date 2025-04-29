@@ -26,8 +26,7 @@ export default {
     choose_sex: "Стать",
     male: "Жінка",
     female: "Чоловік",
-    other: "Інший варіант",
-
+    other: "Інше",
     enter_password: "будь ласка, введіть ваш пароль",
     forgot_password: "забули пароль?",
     invalid_email: "Упс, некоректний формат пошти. Спробуйте ще раз" ,
