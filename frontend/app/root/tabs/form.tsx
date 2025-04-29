@@ -15,7 +15,10 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import i18n from "../../localization"; 
+import i18n from "../../localization";
+import { images } from "../../../constants/assets";
+import BackButton from "../../../components/BackButton";
+
 
 import Animated, {
   useSharedValue,
@@ -61,35 +64,35 @@ export default function FormScreen() {
     if (!text.trim()) {
       return;
     }
-  
+
     setLoading(true);
     setLoadingMessage("Wait, we are analysing your status...");
-  
+
     try {
-      const response = await axios.post("http://192.168.1.104:5000/api/analyze", {
+      const response = await axios.post("http://192.168.1.100:5000/api/analyze", {
         text: text.trim(),
       });
-  
+
       const result = response.data?.result || response.data?.message || "No response.";
-  
+
       setText("");
       Keyboard.dismiss();
       setLoading(false);
       setLoadingMessage("");
-  
+
       router.push({
         pathname: "/root/tabs/advice",
         params: { result: JSON.stringify(result) },
       });
-  
+
     } catch (error) {
       console.error("Submission error:", error);
       setLoading(false);
       setLoadingMessage("Failed to send. Please try again.");
     }
   };
-  
-  
+
+
 
   return (
     <LinearGradient colors={["#b7f5e3", "#798bd0"]} style={{ flex: 1 }}>
@@ -111,7 +114,7 @@ export default function FormScreen() {
               keyboardShouldPersistTaps="handled"
             >
               <Animated.Image
-                source={require("../../../assets/images/penguin_form.png")}
+                source={images.penguin_form}
                 style={[
                   {
                     resizeMode: "contain",
@@ -180,18 +183,18 @@ export default function FormScreen() {
                 />
               </View>
               {loadingMessage ? (
-  <Text
-    style={{
-      marginTop: 20,
-      fontSize: 14,
-      fontStyle: "italic",
-      color: "#333",
-      textAlign: "center",
-    }}
-  >
-    {loadingMessage}
-  </Text>
-) : null}
+                <Text
+                  style={{
+                    marginTop: 20,
+                    fontSize: 14,
+                    fontStyle: "italic",
+                    color: "#333",
+                    textAlign: "center",
+                  }}
+                >
+                  {loadingMessage}
+                </Text>
+              ) : null}
 
             </ScrollView>
           </KeyboardAvoidingView>
@@ -211,18 +214,7 @@ export default function FormScreen() {
               gap: 10,
             }}
           >
-            <TouchableOpacity
-              style={{
-                flex: 1,
-                height: 50,
-                borderRadius: 25,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-              onPress={() => router.back()}
-            >
-              <Ionicons name="arrow-back" size={24} color="black" />
-            </TouchableOpacity>
+            <BackButton/>
 
             <TouchableOpacity
               onPress={handleSubmit}

@@ -2,6 +2,7 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
 import i18n from "./localization";
+import { images } from "./../constants/assets";
 
 export default function Index() {
   return (
@@ -15,7 +16,7 @@ export default function Index() {
 
         <View style={{ marginBottom: -20, alignItems: "center", zIndex: 10 }}>
           <Image
-            source={require("../assets/images/penguin.png")}
+            source={images.penguin}
             style={{
               width: 150,
               height: 150,
@@ -35,18 +36,30 @@ export default function Index() {
           }}
         >
 
-          <View style={{ flexDirection: "row", alignItems: "flex-start", marginTop: 50 }}>
+          <View style={{ flexDirection: "column", alignItems: "flex-start", marginTop: 50 }}>
             <Text
               style={{
                 fontSize: 32,
                 fontFamily: "Montserrat_700Bold",
                 color: "#000",
                 lineHeight: 30,
-                flex: 1,
-                marginBottom: 30
               }}
             >
               {i18n.t("greeting")}
+            </Text>
+
+            <Text
+              style={{
+                fontSize: 24,
+                fontFamily: "Montserrat_700Bold",
+                color: "#000",
+                lineHeight: 30,
+                marginBottom: 30,
+                marginTop: 10
+
+              }}
+            >
+              {i18n.t("greeting_question")}
             </Text>
           </View>
 
@@ -56,7 +69,7 @@ export default function Index() {
               fontFamily: "Montserrat_500Medium",
               color: "#000",
               marginTop: 0,
-              lineHeight: 18,
+              lineHeight: 22,
               marginBottom: 20
             }}
           >
@@ -85,7 +98,7 @@ export default function Index() {
                 fontFamily: "Montserrat_600SemiBold",
               }}
             >
-              {i18n.t("next")}
+              {i18n.t("continue")}
             </Text>
           </TouchableOpacity>
         </Link>
