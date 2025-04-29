@@ -6,12 +6,14 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
+  Image,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import i18n from "../../localization";
 import BackButton from "../../../components/BackButton";
+import { images } from "../../../constants/assets";
 import axios from "axios";
 
 export default function EnterPasswordScreen() {
@@ -22,95 +24,160 @@ export default function EnterPasswordScreen() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post("http://192.168.1.101:5000/users/login", {
+      const response = await axios.post("http://192.168.1.100:5000/users/login", {
         email,
         password,
       });
-  
+
       const user = response.data;
       console.log("Logged in user:", user);
-  
-      // Save user data locally
+
       await SecureStore.setItemAsync("user_id", user.id);
       await SecureStore.setItemAsync("user_name", user.name);
       await SecureStore.setItemAsync("user_email", user.email);
-  
-      // Navigate to main app
+
       router.replace("/root/tabs/form");
     } catch (err) {
       console.error("Login error:", err);
       setError(i18n.t("wrong_password"));
     }
   };
-  
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <LinearGradient colors={["#b7f5e3", "#798bd0"]} style={{ flex: 1 }}>
-        
         <View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: 20 }}>
-          {/* Card */}
-          <View style={{ width: "100%", maxWidth: 400, backgroundColor: "rgba(255,255,255,0.3)", borderRadius: 30, padding: 20 }}>
-            <Text style={{ fontSize: 24, fontFamily: "Montserrat_700Bold", marginBottom: 20, textAlign: "center", color: "#000" }}>
+          <View
+            style={{
+              width: "100%",
+              maxWidth: 400,
+              backgroundColor: "rgba(255,255,255,0.3)",
+              borderRadius: 30,
+              padding: 20,
+              alignItems: "center",
+            }}
+          >
+
+            <Image
+              source={images.penguin_password}
+              style={{ width: 100, height: 100, marginBottom: 20, resizeMode: "contain" }}
+            />
+
+            <Text
+              style={{
+                fontSize: 19,
+                fontFamily: "Montserrat_700Bold",
+                marginBottom: 20,
+                textAlign: "center",
+                color: "#000",
+                textTransform: "uppercase",
+                letterSpacing: 1,
+              }}
+            >
+              {i18n.t("welcome_back")}
+            </Text>
+
+            <Text
+              style={{
+                fontSize: 12,
+                fontFamily: "Montserrat_400Regular",
+                textAlign: "center",
+                color: "#000",
+                marginBottom: 20,
+                textTransform: "uppercase",
+                letterSpacing: 1,
+              }}
+            >
               {i18n.t("enter_password")}
             </Text>
 
-            <TextInput
-              placeholder={i18n.t("password")}
-              placeholderTextColor="#555"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
+            <View
               style={{
-                backgroundColor: "#fff",
-                borderRadius: 20,
+                backgroundColor: "rgba(255, 255, 255, 0.5)",
+                borderRadius: 30,
                 paddingHorizontal: 15,
-                height: 50,
+                width: "100%",
                 marginBottom: 15,
-                fontFamily: "Montserrat_400Regular",
               }}
-            />
+            >
+              <TextInput
+                placeholder={i18n.t("password")}
+                placeholderTextColor="#555"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+                style={{
+                  height: 50,
+                  fontSize: 14,
+                  color: "#000",
+                  fontFamily: "Montserrat_400Regular",
+                }}
+              />
+            </View>
 
             {error ? (
-              <Text style={{ color: "red", fontSize: 14, fontFamily: "Montserrat_400Regular", marginBottom: 10 }}>
+              <Text
+                style={{
+                  color: "red",
+                  fontSize: 14,
+                  fontFamily: "Montserrat_400Regular",
+                  marginBottom: 10,
+
+                }}
+              >
                 {error}
               </Text>
             ) : null}
 
-            {/* Forgot Password */}
             <TouchableOpacity onPress={() => console.log("Forgot Password pressed")} style={{ marginBottom: 20 }}>
-              <Text style={{ color: "#5661b3", fontSize: 14, fontFamily: "Montserrat_600SemiBold", textAlign: "center" }}>
+              <Text
+                style={{
+                  color: "#5661b3",
+                  fontSize: 14,
+                  fontFamily: "Montserrat_600SemiBold",
+                  textAlign: "center",
+                }}
+              >
                 {i18n.t("forgot_password")}
               </Text>
             </TouchableOpacity>
 
-            {/* Submit Button */}
             <TouchableOpacity
               onPress={handleLogin}
+              disabled={password.trim().length === 0}
               style={{
-                backgroundColor: "#5661b3",
+                backgroundColor: "transparent",
                 borderRadius: 25,
                 paddingVertical: 12,
                 alignItems: "center",
+                width: "100%",
               }}
             >
-              <Text style={{ color: "#fff", fontSize: 18, fontFamily: "Montserrat_600SemiBold" }}>
+              <Text
+                style={{
+                  color: password.trim().length > 0 ? "#5661b3" : "rgba(86, 97, 179, 0.5)",
+                  fontSize: 18,
+                  fontFamily: "Montserrat_600SemiBold",
+                  opacity: password.trim().length > 0 ? 1 : 0.5,
+                }}
+              >
                 {i18n.t("login")}
               </Text>
             </TouchableOpacity>
+
           </View>
         </View>
 
-        {/* Bottom BackButton */}
-        <View style={{
-          width: "90%",
-          maxWidth: 400,
-          alignSelf: "center",
-          marginBottom: 30,
-        }}>
+        <View
+          style={{
+            width: "90%",
+            maxWidth: 400,
+            alignSelf: "center",
+            marginBottom: 30,
+          }}
+        >
           <BackButton />
         </View>
-
       </LinearGradient>
     </TouchableWithoutFeedback>
   );

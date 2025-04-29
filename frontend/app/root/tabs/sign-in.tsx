@@ -74,7 +74,7 @@ export default function SignInScreen() {
             <Text style={{
               fontSize: 20,
               fontFamily: "Montserrat_700Bold",
-              marginBottom: 10,
+              marginBottom: 20,
               textAlign: "center",
               color: "#000",
               textTransform: "uppercase",
