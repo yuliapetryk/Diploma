@@ -144,7 +144,10 @@ export default function EnterPasswordScreen() {
               </Text>
             ) : null}
 
-            <TouchableOpacity onPress={() => console.log("Forgot Password pressed")} style={{ marginBottom: 20 }}>
+            <TouchableOpacity
+              onPress={() => router.push({ pathname: "/root/tabs/forgot-password", params: { email } })}
+              style={{ marginBottom: 20 }}
+            >
               <Text
                 style={{
                   color: "#5661b3",
@@ -156,6 +159,7 @@ export default function EnterPasswordScreen() {
                 {i18n.t("forgot_password")}
               </Text>
             </TouchableOpacity>
+
 
             <TouchableOpacity
               onPress={handleLogin}

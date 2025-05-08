@@ -33,6 +33,11 @@ export default {
     we_are_happy: "Зробіть свій досвід з нами більш персоналізованим",
     welcome_back:"Раді бачити вас знову!",
     wrong_password: "Упс, неправильний пароль. Спробуйте ще раз",
-    google: "або увійдіть з Google"
+    google: "або увійдіть з Google",
+    forgot_password_title: "Забули пароль?",
+    enter_your_email: "Ми надішлемо лист на цю пошту, щоб встановити новий пароль",
+    send_reset_link: "Надіслати",
+    reset_link_sent: "Перевірте пошту. Там має бути лист від нас",
+    error_sending_link: "Не вдалось надіслати. Спробуйте ща раз"
   };
   
