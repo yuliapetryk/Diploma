@@ -13,6 +13,6 @@ i18n.enableFallback = true;
 
 const userLocale = Localization.getLocales()[0]?.languageCode || "uk";
 
-i18n.locale = userLocale.startsWith("en") ? "uk" : "en";
+i18n.locale = userLocale.startsWith("uk") ? "uk" : "en";
 
 export default i18n;

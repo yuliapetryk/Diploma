@@ -1,10 +1,18 @@
+from typing import Optional
+
 from sqlalchemy.orm import Session
 from app.db_models import User
 import uuid
 from datetime import datetime
 
 
-def create_user(db: Session, email: str, password_hash: str, name: str, sex: str):
+def create_user(
+        db: Session,
+        email: str,
+        name: str,
+        password_hash: Optional[str] = None,
+        sex: Optional[str] = None
+):
     new_user = User(
         id=uuid.uuid4(),
         email=email,

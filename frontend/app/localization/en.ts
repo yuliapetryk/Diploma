@@ -33,4 +33,5 @@ export default {
   we_are_happy: "Make your experience with us more personalized",
   welcome_back: "Happy to see you again!",
   wrong_password: "Oops, wrong password. Please try again",
+   google: "or \n Sign in with Google",
 };

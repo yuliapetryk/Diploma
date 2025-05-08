@@ -4,6 +4,13 @@ from app.database import SessionLocal
 from app.schemas import UserCreate, UserOut, UserLogin
 from app.crud import users as crud_users
 from app.core import security
+from pydantic import BaseModel
+
+
+class GoogleLogin(BaseModel):
+    email: str
+    name: str
+
 
 router = APIRouter()
 
@@ -44,7 +51,10 @@ def register_user(user_create: UserCreate, db: Session = Depends(get_db)):
 def check_email(email: str, db: Session = Depends(get_db)):
     existing_user = crud_users.get_user_by_email(db, email=email)
     if existing_user:
-        return {"exists": True}
+        return {
+            "exists": True,
+            "provider": existing_user.auth_provider or "local"
+        }
     return {"exists": False}
 
 
@@ -61,4 +71,21 @@ def login_user(user_login: UserLogin, db: Session = Depends(get_db)):
         "id": str(db_user.id),
         "name": db_user.name,
         "email": db_user.email
+    }
+
+
+@router.post("/google-login")
+def google_login(user_data: GoogleLogin, db: Session = Depends(get_db)):
+    user = crud_users.get_user_by_email(db, user_data.email)
+    if not user:
+        user = crud_users.create_user(
+            db=db,
+            email=user_data.email,
+            name=user_data.name,
+            auth_provider="google"
+        )
+    return {
+        "id": str(user.id),
+        "email": user.email,
+        "name": user.name,
     }

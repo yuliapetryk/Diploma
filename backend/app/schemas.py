@@ -15,6 +15,10 @@ class UserLogin(BaseModel):
     email: EmailStr
     password: str
 
+class GoogleLogin(BaseModel):
+    email: EmailStr
+    name: str
+
 class UserOut(BaseModel):
     id: str
     email: EmailStr

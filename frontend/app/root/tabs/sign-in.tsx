@@ -14,6 +14,7 @@ import axios from "axios";
 import i18n from "../../localization";
 import BackButton from "../../../components/BackButton";
 import { images } from "../../../constants/assets";
+import GoogleSignInButton from "../../../components/GoogleSignInButton";
 
 export default function SignInScreen() {
   const router = useRouter();
@@ -51,7 +52,23 @@ export default function SignInScreen() {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <LinearGradient colors={["#b7f5e3", "#798bd0"]} style={{ flex: 1 }}>
 
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: 20 }}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            padding: 20,
+            backgroundColor: "#ffffff", 
+            shadowColor: "#000", 
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 5, 
+          }}
+        >
           <View style={{
             width: "100%",
             maxWidth: 400,
@@ -120,6 +137,20 @@ export default function SignInScreen() {
                 }}
               />
             </View>
+
+            <Text style={{
+              fontSize: 12,
+              fontFamily: "Montserrat_400Regular",
+              textAlign: "center",
+              color: "#000",
+              marginBottom: 20,
+              textTransform: "uppercase",
+              letterSpacing: 1,
+            }}>
+              {i18n.t("google")}
+            </Text>
+
+            <GoogleSignInButton />
 
             {error ? (
               <Text style={{

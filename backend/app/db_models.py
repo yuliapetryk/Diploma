@@ -17,7 +17,8 @@ class User(Base):
     sex = Column(String, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-
+    auth_provider = Column(String, default="local")
+    
     mood_logs = relationship("MoodLog", back_populates="user")
 
 
