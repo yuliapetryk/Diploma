@@ -15,6 +15,7 @@ import i18n from "../../localization";
 import BackButton from "../../../components/BackButton";
 import { images } from "../../../constants/assets";
 import GoogleSignInButton from "../../../components/GoogleSignInButton";
+import { API_BASE_URL } from '@env';
 
 export default function SignInScreen() {
   const router = useRouter();
@@ -33,7 +34,7 @@ export default function SignInScreen() {
     }
 
     try {
-      const response = await axios.get("http://192.168.1.100:5000/users/check-email", {
+      const response = await axios.get(`${API_BASE_URL}/users/check-email`, {
         params: { email },
       });
 
@@ -58,15 +59,14 @@ export default function SignInScreen() {
             justifyContent: "center",
             alignItems: "center",
             padding: 20,
-            backgroundColor: "#ffffff", 
-            shadowColor: "#000", 
+            shadowColor: "#000",
             shadowOffset: {
-              width: 0,
-              height: 2,
+              width: 5,
+              height: 5,
             },
             shadowOpacity: 0.25,
             shadowRadius: 3.84,
-            elevation: 5, 
+            elevation: 5,
           }}
         >
           <View style={{

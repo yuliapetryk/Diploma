@@ -15,6 +15,7 @@ import axios from "axios";
 import i18n from "../../localization";
 import BackButton from "../../../components/BackButton";
 import { images } from "../../../constants/assets";
+import { API_BASE_URL } from '@env';
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -27,7 +28,7 @@ export default function RegisterScreen() {
 
   const handleRegister = async () => {
     try {
-      const response = await axios.post("http://192.168.1.100:5000/users/register", {
+      const response = await axios.post(`${API_BASE_URL}/users/register`, {
         email,
         password,
         name,
@@ -52,7 +53,21 @@ export default function RegisterScreen() {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <LinearGradient colors={["#b7f5e3", "#798bd0"]} style={{ flex: 1 }}>
 
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: 20 }}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            padding: 20,
+            shadowColor: "#000",
+            shadowOffset: {
+              width: 5,
+              height: 5,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 5,
+          }}>
           <View
             style={{
               width: "100%",

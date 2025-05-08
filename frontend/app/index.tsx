@@ -12,7 +12,20 @@ export default function Index() {
     >
       <View style={{ height: 60 }} />
 
-      <View style={{ alignItems: "center", width: "100%", position: "relative" }}>
+      <View
+        style={{
+          alignItems: "center",
+          width: "100%",
+          position: "relative",
+          shadowColor: "#000", 
+          shadowOffset: {
+            width: 5,
+            height: 5,
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 5,
+        }}>
 
         <View style={{ marginBottom: -20, alignItems: "center", zIndex: 10 }}>
           <Image
@@ -36,43 +49,42 @@ export default function Index() {
           }}
         >
 
-          <View style={{ flexDirection: "column", alignItems: "flex-start", marginTop: 50 }}>
-            <Text
-              style={{
-                fontSize: 32,
-                fontFamily: "Montserrat_700Bold",
-                color: "#000",
-                lineHeight: 30,
-              }}
-            >
+          <View style={{ flexDirection: "column", alignItems: "flex-start", marginTop: 30 }}>
+            <Text style={{
+              fontSize: 30,
+              fontFamily: "Montserrat_700Bold",
+              marginBottom: 5,
+              textAlign: "center",
+              color: "#000",
+              textTransform: "uppercase",
+              letterSpacing: 1,
+            }}>
+
               {i18n.t("greeting")}
             </Text>
 
-            <Text
-              style={{
-                fontSize: 24,
-                fontFamily: "Montserrat_700Bold",
-                color: "#000",
-                lineHeight: 30,
-                marginBottom: 30,
-                marginTop: 10
-
-              }}
-            >
+            <Text style={{
+              fontSize: 20,
+              fontFamily: "Montserrat_700Bold",
+              marginBottom: 20,
+              textAlign: "center",
+              color: "#000",
+              textTransform: "uppercase",
+              letterSpacing: 1,
+            }}>
               {i18n.t("greeting_question")}
             </Text>
           </View>
 
-          <Text
-            style={{
-              fontSize: 16,
-              fontFamily: "Montserrat_500Medium",
-              color: "#000",
-              marginTop: 0,
-              lineHeight: 22,
-              marginBottom: 20
-            }}
-          >
+          <Text style={{
+            fontSize: 14,
+            fontFamily: "Montserrat_400Regular",
+            color: "#000",
+            marginBottom: 20,
+            textTransform: "uppercase",
+            letterSpacing: 1,
+            lineHeight: 20
+          }}>
             {i18n.t("description")}
           </Text>
         </View>

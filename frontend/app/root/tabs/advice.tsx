@@ -8,6 +8,7 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
+import { API_BASE_URL } from '@env';
 
 export default function AdviceScreen() {
   const router = useRouter();

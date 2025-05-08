@@ -18,7 +18,7 @@ import { useRouter } from "expo-router";
 import i18n from "../../localization";
 import { images } from "../../../constants/assets";
 import BackButton from "../../../components/BackButton";
-
+import { API_BASE_URL } from '@env';
 
 import Animated, {
   useSharedValue,
@@ -69,7 +69,7 @@ export default function FormScreen() {
     setLoadingMessage("Wait, we are analysing your status...");
 
     try {
-      const response = await axios.post("http://192.168.1.100:5000/api/analyze", {
+      const response = await axios.post(`${API_BASE_URL}/api/analyze`, {
         text: text.trim(),
       });
 
@@ -97,7 +97,18 @@ export default function FormScreen() {
   return (
     <LinearGradient colors={["#b7f5e3", "#798bd0"]} style={{ flex: 1 }}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={{ flex: 1 }}>
+        <View
+          style={{
+            flex: 1,
+            shadowColor: "#000",
+            shadowOffset: {
+              width: 5,
+              height: 5,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 5,
+          }}>
           <KeyboardAvoidingView
             style={{ flex: 1 }}
             behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -214,7 +225,7 @@ export default function FormScreen() {
               gap: 10,
             }}
           >
-            <BackButton/>
+            <BackButton />
 
             <TouchableOpacity
               onPress={handleSubmit}
