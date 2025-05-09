@@ -39,6 +39,12 @@ export default {
   send_reset_link: "Send Reset Link",
   reset_link_sent: "Check your email for the reset link!",
   error_sending_link: "Failed to send the link. Please try again.",
-  friend:"friend",
-  welcome:"Welcome",
+  friend: "friend",
+  welcome: "Welcome",
+  edit_your_data: "Do you want to edit your data?",
+  or_view: "Or view",
+  diary: "Diary",
+  logout: "Logout",
+  change_language: "or change language",
+  confirm: "Confirm"
 };

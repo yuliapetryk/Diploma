@@ -37,16 +37,17 @@ export default function FormScreen() {
 
   const penguinSize = useSharedValue(120);
 
+
   useEffect(() => {
     const showEvent = Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow";
     const hideEvent = Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide";
 
     const showSub = Keyboard.addListener(showEvent, () => {
-      penguinSize.value = withTiming(60, { duration: 300 });
+      penguinSize.value = withTiming(0, { duration: 300 });
     });
 
     const hideSub = Keyboard.addListener(hideEvent, () => {
-      penguinSize.value = withTiming(120, { duration: 300 });
+      penguinSize.value = withTiming(130, { duration: 300 });
     });
 
     return () => {
@@ -105,23 +106,38 @@ export default function FormScreen() {
     }
   };
 
-
-
   return (
     <LinearGradient colors={["#b7f5e3", "#798bd0"]} style={{ flex: 1 }}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={{ flex: 1 }}>
         <View
           style={{
-            flex: 1,
-            shadowColor: "#000",
-            shadowOffset: {
-              width: 5,
-              height: 5,
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-            elevation: 5,
-          }}>
+            width: "80%",
+            maxWidth: 400,
+            height: 70,
+            borderRadius: 40,
+            flexDirection: "row",
+            justifyContent: "flex-end",
+            alignItems: "flex-end",
+            paddingHorizontal: 15,
+            alignSelf: "flex-end",
+            marginTop: 20,
+            marginRight: 20,
+            gap: 10,
+          }}
+        >
+
+         {userName ? (
+            <TouchableOpacity onPress={() => router.push("/root/tabs/profile")}>
+              <Ionicons name="person-outline" size={24} color="black"  />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity onPress={() => router.push("/root/tabs/sign-in")}>
+              <Ionicons name="log-in-outline" size={32} color="black" />
+            </TouchableOpacity>
+          )}
+        </View>
+
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <KeyboardAvoidingView
             style={{ flex: 1 }}
             behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -134,6 +150,7 @@ export default function FormScreen() {
                 alignItems: "center",
                 paddingHorizontal: 20,
                 paddingBottom: 20,
+                marginTop: -20, 
               }}
               keyboardShouldPersistTaps="handled"
             >
@@ -160,7 +177,7 @@ export default function FormScreen() {
                   fontFamily: "Montserrat_600SemiBold",
                 }}
               >
-                {i18n.t("welcome")},  {userName ?? i18n.t("friend")}!
+                {i18n.t("welcome")}, {userName ?? i18n.t("friend")}!
               </Text>
 
               <Text
@@ -234,64 +251,64 @@ export default function FormScreen() {
                   {loadingMessage}
                 </Text>
               ) : null}
-
             </ScrollView>
           </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
 
-          <View
+        <View
+          style={{
+            width: "90%",
+            maxWidth: 400,
+            height: 70,
+            borderRadius: 40,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            paddingHorizontal: 15,
+            alignSelf: "center",
+            marginBottom: 40,
+            gap: 10,
+          }}
+        >
+          <BackButton />
+
+          <TouchableOpacity
+            onPress={handleSubmit}
+            disabled={text.trim().length === 0}
             style={{
-              width: "90%",
-              maxWidth: 400,
-              height: 70,
-              borderRadius: 40,
-              flexDirection: "row",
-              justifyContent: "space-between",
+              flex: 2,
+              height: 50,
+              borderRadius: 25,
+              justifyContent: "center",
               alignItems: "center",
-              paddingHorizontal: 15,
-              alignSelf: "center",
-              marginBottom: 40,
-              gap: 10,
             }}
           >
-            <BackButton />
-
-            <TouchableOpacity
-              onPress={handleSubmit}
-              disabled={text.trim().length === 0}
+            <Text
               style={{
-                flex: 2,
-                height: 50,
-                borderRadius: 25,
-                justifyContent: "center",
-                alignItems: "center",
+                color: text.trim().length === 0 ? "transparent" : "#000",
+                fontSize: 18,
+                fontFamily: "Montserrat_600SemiBold",
               }}
             >
-              <Text
-                style={{
-                  color: text.trim().length === 0 ? "transparent" : "#000",
-                  fontSize: 18,
-                  fontFamily: "Montserrat_600SemiBold",
-                }}
-              >
-                {i18n.t("submit")}
-              </Text>
-            </TouchableOpacity>
+              {i18n.t("submit")}
+            </Text>
+          </TouchableOpacity>
 
-            <TouchableOpacity
-              style={{
-                flex: 1,
-                height: 50,
-                borderRadius: 25,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-              onPress={() => console.log("Voice pressed")}
-            >
-              <Ionicons name="mic" size={24} color="black" />
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              height: 50,
+              borderRadius: 25,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            onPress={() => console.log("Voice pressed")}
+          >
+            <Ionicons name="mic" size={24} color="black" />
+          </TouchableOpacity>
         </View>
-      </TouchableWithoutFeedback>
+      </View>
     </LinearGradient>
+
   );
 }

@@ -48,4 +48,10 @@ export default {
   password_reset_success: "Пароль успішно змінено",
   friend:"друже",
   welcome:"Вітаю",
+  edit_your_data: "Хочете щось змінити у профілі?",
+  or_view: "або переглянути",
+  diary: "Щоденник",
+  logout: "Вийти",
+  change_language: "або змінити мову",
+  confirm: "Підтвердити"
 };
