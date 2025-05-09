@@ -10,7 +10,6 @@ export default function MainNavigator() {
   useEffect(() => {
     const checkAuth = async () => {
       const userId = await SecureStore.getItemAsync("user_id");
-
       if (userId) {
         router.replace("/root/tabs/form");
       } else {
