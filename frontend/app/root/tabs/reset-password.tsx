@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   View,
   Text,
@@ -16,48 +16,35 @@ import { images } from "../../../constants/assets";
 import axios from "axios";
 import { API_BASE_URL } from "@env";
 
-export default function ForgotPasswordScreen() {
+export default function ResetPasswordScreen() {
   const router = useRouter();
-  const { email: emailParam } = useLocalSearchParams();
-  
-  const [email, setEmail] = useState<string>("");
-  const [error, setError] = useState<string>("");
-  const [message, setMessage] = useState<string>("");
-
-  useEffect(() => {
-    if (typeof emailParam === "string") {
-      setEmail(emailParam);
-    }
-  }, [emailParam]);
-
-  const validateEmail = (email: string) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email.toLowerCase());
-  };
+  const { token } = useLocalSearchParams();  
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handlePasswordReset = async () => {
-    if (!validateEmail(email)) {
-      setError(i18n.t("invalid_email"));
-      setMessage("");
+    if (password !== confirmPassword) {
+      setError(i18n.t("passwords_not_match"));
       return;
     }
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/users/forgot-password`, {
-        email,
+      const response = await axios.post(`${API_BASE_URL}/users/reset-password`, {
+        token,
+        new_password: password,
       });
 
-      if (response.data.success) {
-        setMessage(i18n.t("reset_link_sent"));
-        setError("");
-      } else {
-        setError(i18n.t("error_sending_reset_link"));
-        setMessage("");
+      if (response.data.message === "Password has been successfully reset") {
+        setSuccessMessage(i18n.t("password_reset_success"));
+        setTimeout(() => {
+          router.replace("/root/tabs/sign-in");
+        }, 2000);
       }
     } catch (err) {
-      console.error("Password reset error:", err);
-      setError(i18n.t("error_sending_reset_link"));
-      setMessage("");
+      console.error("Reset Password error:", err);
+      setError(i18n.t("reset_password_error"));
     }
   };
 
@@ -71,10 +58,7 @@ export default function ForgotPasswordScreen() {
             alignItems: "center",
             padding: 20,
             shadowColor: "#000",
-            shadowOffset: {
-              width: 5,
-              height: 5,
-            },
+            shadowOffset: { width: 5, height: 5 },
             shadowOpacity: 0.25,
             shadowRadius: 3.84,
             elevation: 5,
@@ -91,7 +75,7 @@ export default function ForgotPasswordScreen() {
             }}
           >
             <Image
-              source={images.penguin_forgot_password}
+              source={images.penguin_password}
               style={{ width: 100, height: 100, marginBottom: 20, resizeMode: "contain" }}
             />
 
@@ -106,7 +90,7 @@ export default function ForgotPasswordScreen() {
                 letterSpacing: 1,
               }}
             >
-              {i18n.t("forgot_password_title")}
+              {i18n.t("reset_password")}
             </Text>
 
             <Text
@@ -120,7 +104,7 @@ export default function ForgotPasswordScreen() {
                 letterSpacing: 1,
               }}
             >
-              {i18n.t("enter_your_email")}
+              {i18n.t("enter_new_password")}
             </Text>
 
             <View
@@ -133,16 +117,11 @@ export default function ForgotPasswordScreen() {
               }}
             >
               <TextInput
-                placeholder={i18n.t("email")}
+                placeholder={i18n.t("new_password")}
                 placeholderTextColor="#555"
-                value={email}
-                onChangeText={(text) => {
-                  setEmail(text);
-                  setError("");
-                  setMessage("");
-                }}
-                keyboardType="email-address"
-                autoCapitalize="none"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
                 style={{
                   height: 50,
                   fontSize: 14,
@@ -152,7 +131,30 @@ export default function ForgotPasswordScreen() {
               />
             </View>
 
-            {/* Display Error */}
+            <View
+              style={{
+                backgroundColor: "rgba(255, 255, 255, 0.5)",
+                borderRadius: 30,
+                paddingHorizontal: 15,
+                width: "100%",
+                marginBottom: 15,
+              }}
+            >
+              <TextInput
+                placeholder={i18n.t("confirm_password")}
+                placeholderTextColor="#555"
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+                secureTextEntry
+                style={{
+                  height: 50,
+                  fontSize: 14,
+                  color: "#000",
+                  fontFamily: "Montserrat_400Regular",
+                }}
+              />
+            </View>
+
             {error ? (
               <Text
                 style={{
@@ -166,8 +168,7 @@ export default function ForgotPasswordScreen() {
               </Text>
             ) : null}
 
-            {/* Display Success Message */}
-            {message ? (
+            {successMessage ? (
               <Text
                 style={{
                   color: "green",
@@ -176,13 +177,13 @@ export default function ForgotPasswordScreen() {
                   marginBottom: 10,
                 }}
               >
-                {message}
+                {successMessage}
               </Text>
             ) : null}
 
             <TouchableOpacity
               onPress={handlePasswordReset}
-              disabled={!validateEmail(email)}
+              disabled={password.trim().length === 0 || confirmPassword.trim().length === 0}
               style={{
                 backgroundColor: "transparent",
                 borderRadius: 25,
@@ -193,12 +194,12 @@ export default function ForgotPasswordScreen() {
             >
               <Text
                 style={{
-                  color: validateEmail(email) ? "#5661b3" : "rgba(86, 97, 179, 0.5)",
+                  color: password.trim().length > 0 ? "#5661b3" : "rgba(86, 97, 179, 0.5)",
                   fontSize: 18,
                   fontFamily: "Montserrat_600SemiBold",
                 }}
               >
-                {i18n.t("send_reset_link")}
+                {i18n.t("reset_password")}
               </Text>
             </TouchableOpacity>
           </View>

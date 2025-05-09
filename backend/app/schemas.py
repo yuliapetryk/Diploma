@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from pydantic import BaseModel, EmailStr
 
@@ -9,15 +10,19 @@ class UserCreate(BaseModel):
     name: str
     sex: str
 
+
 from pydantic import BaseModel, EmailStr
+
 
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
 
+
 class GoogleLogin(BaseModel):
     email: EmailStr
     name: str
+
 
 class UserOut(BaseModel):
     id: str
@@ -25,9 +30,19 @@ class UserOut(BaseModel):
     name: str
     sex: str
     created_at: datetime
+    reset_token: Optional[str] = None
 
     class Config:
         orm_mode = True
+
+
+class PasswordResetRequest(BaseModel):
+    email: EmailStr
+
+
+class PasswordResetConfirm(BaseModel):
+    token: str
+    new_password: str
 
 
 class MoodLogCreate(BaseModel):

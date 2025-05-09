@@ -18,9 +18,9 @@ class User(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     auth_provider = Column(String, default="local")
-    
-    mood_logs = relationship("MoodLog", back_populates="user")
+    reset_token = Column(String, nullable=True)
 
+    mood_logs = relationship("MoodLog", back_populates="user")
 
 class MoodLog(Base):
     __tablename__ = "mood_logs"

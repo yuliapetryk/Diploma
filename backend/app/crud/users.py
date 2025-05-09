@@ -11,7 +11,8 @@ def create_user(
         email: str,
         name: str,
         password_hash: Optional[str] = None,
-        sex: Optional[str] = None
+        sex: Optional[str] = None,
+        reset_token: Optional[str] = None
 ):
     new_user = User(
         id=uuid.uuid4(),
@@ -19,6 +20,7 @@ def create_user(
         password_hash=password_hash,
         name=name,
         sex=sex,
+        reset_token=reset_token,
         created_at=datetime.utcnow(),
         updated_at=datetime.utcnow()
     )
@@ -26,6 +28,7 @@ def create_user(
     db.commit()
     db.refresh(new_user)
     return new_user
+
 
 
 def get_user_by_email(db: Session, email: str):

@@ -1,10 +1,17 @@
+import uuid
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+
+from app.core.security import get_password_hash
 from app.database import SessionLocal
-from app.schemas import UserCreate, UserOut, UserLogin
+from app.db_models import User
+from app.schemas import UserCreate, UserOut, UserLogin, PasswordResetRequest, PasswordResetConfirm
 from app.crud import users as crud_users
 from app.core import security
 from pydantic import BaseModel
+
+from app.utils import send_reset_email
 
 
 class GoogleLogin(BaseModel):
@@ -89,3 +96,30 @@ def google_login(user_data: GoogleLogin, db: Session = Depends(get_db)):
         "email": user.email,
         "name": user.name,
     }
+
+@router.post("/forgot-password")
+def forgot_password(request: PasswordResetRequest, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == request.email).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    reset_token = str(uuid.uuid4())
+    user.reset_token = reset_token
+    db.commit()
+    send_reset_email(user.email, reset_token)
+
+    return {"message": "Password reset link has been sent to your email"}
+
+@router.post("/reset-password")
+def reset_password(request: PasswordResetConfirm, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.reset_token == request.token).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Invalid token")
+
+    hashed_password = get_password_hash(request.new_password)
+
+    user.password_hash = hashed_password
+    user.reset_token = None
+    db.commit()
+
+    return {"message": "Password has been successfully reset"}
