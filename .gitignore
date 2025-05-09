@@ -12,3 +12,7 @@ backend/app/crud/__pycache__/users.cpython-312.pyc
 backend/scripts/__pycache__/__init__.cpython-312.pyc
 backend/scripts/__pycache__/create_tables.cpython-312.pyc
 frontend/.env
+*.pyc
+*.pyc
+/backend/app/__pycache__
+/backend/model

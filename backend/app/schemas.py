@@ -77,3 +77,7 @@ class TipOut(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class TextInput(BaseModel):
+    text: str
