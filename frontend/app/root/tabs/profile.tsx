@@ -13,6 +13,7 @@ import i18n from "../../localization";
 import * as SecureStore from "expo-secure-store";
 import { Ionicons } from "@expo/vector-icons";
 import BackButton from "../../../components/BackButton";
+import LanguageSwitcher from "./language_switcher";
 import axios from "axios";
 import { API_BASE_URL } from "@env";
 
@@ -202,14 +203,7 @@ const handlePasswordChange = async () => {
 
         <Text style={styles.subHeaderText}>{i18n.t("change_language")}</Text>
 
-        <View style={styles.languageContainer}>
-          <TouchableOpacity style={styles.langButton} onPress={() => i18n.locale = 'en'}>
-            <Text style={styles.langButtonText}>English</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.langButton} onPress={() => i18n.locale = 'uk'}>
-            <Text style={styles.langButtonText}>Українська</Text>
-          </TouchableOpacity>
-        </View>
+       <LanguageSwitcher></LanguageSwitcher>
 
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
           <Ionicons name="log-out-outline" size={20} color="#d9534f" />

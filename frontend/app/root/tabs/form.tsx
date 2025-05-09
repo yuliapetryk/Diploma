@@ -273,7 +273,6 @@ export default function FormScreen() {
             gap: 10,
           }}
         >
-          <BackButton />
 
           <TouchableOpacity
             onPress={handleSubmit}

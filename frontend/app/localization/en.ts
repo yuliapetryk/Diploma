@@ -38,6 +38,7 @@ export default {
   enter_your_email: "Enter your email to reset your password",
   send_reset_link: "Send Reset Link",
   old_password:"Old password",
+  new_password:"New password",
   reset_link_sent: "Check your email for the reset link!",
   error_sending_link: "Failed to send the link. Please try again.",
   friend: "friend",
