@@ -54,5 +54,8 @@ export default {
   diary: "Щоденник",
   logout: "Вийти",
   change_language: "або змінити мову",
-  confirm: "Підтвердити"
+  confirm: "Підтвердити",
+  loading_message: "Зачекайте, ми обробляємо ваш запит...",
+  loading_error_message: "Виникла помилка, спробуйте ще раз"
+
 };

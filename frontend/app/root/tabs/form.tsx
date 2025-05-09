@@ -83,7 +83,7 @@ export default function FormScreen() {
     }
 
     setLoading(true);
-    setLoadingMessage("Wait, we are analysing your status...");
+    setLoadingMessage(i18n.t("loading_message"));
 
     try {
       const response = await axios.post(`${API_BASE_URL}/api/analyze`, {
@@ -105,7 +105,7 @@ export default function FormScreen() {
     } catch (error) {
       console.error("Submission error:", error);
       setLoading(false);
-      setLoadingMessage("Failed to send. Please try again.");
+      setLoadingMessage(i18n.t("loading_error_message"));
     }
   };
 
@@ -152,8 +152,7 @@ export default function FormScreen() {
                 justifyContent: "center",
                 alignItems: "center",
                 paddingHorizontal: 20,
-                paddingBottom: 20,
-                marginTop: -20, 
+                paddingBottom: 70,
               }}
               keyboardShouldPersistTaps="handled"
             >
@@ -254,26 +253,7 @@ export default function FormScreen() {
                   {loadingMessage}
                 </Text>
               ) : null}
-            </ScrollView>
-          </KeyboardAvoidingView>
-        </TouchableWithoutFeedback>
-
-        <View
-          style={{
-            width: "90%",
-            maxWidth: 400,
-            height: 70,
-            borderRadius: 40,
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            paddingHorizontal: 15,
-            alignSelf: "center",
-            marginBottom: 40,
-            gap: 10,
-          }}
-        >
-
+              
           <TouchableOpacity
             onPress={handleSubmit}
             disabled={text.trim().length === 0}
@@ -295,6 +275,26 @@ export default function FormScreen() {
               {i18n.t("submit")}
             </Text>
           </TouchableOpacity>
+            </ScrollView>
+          </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
+
+        <View
+          style={{
+            width: "90%",
+            maxWidth: 400,
+            height: 70,
+            borderRadius: 40,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            paddingHorizontal: 15,
+            alignSelf: "center",
+            marginBottom: 40,
+            gap: 10,
+          }}
+        >
+
 
           <TouchableOpacity
             style={{

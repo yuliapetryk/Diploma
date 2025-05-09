@@ -48,5 +48,7 @@ export default {
   diary: "Diary",
   logout: "Logout",
   change_language: "or change language",
-  confirm: "Confirm"
+  confirm: "Confirm",
+  loading_message: "Wait, we are analysing your status...",
+  loading_error_message: "Failed to send. Please try again"
 };
