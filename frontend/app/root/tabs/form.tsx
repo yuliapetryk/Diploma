@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { useRouter, useFocusEffect } from "expo-router";
 import i18n from "../../localization";
 import { images } from "../../../constants/assets";
 import BackButton from "../../../components/BackButton";
@@ -56,18 +56,21 @@ export default function FormScreen() {
     };
   }, []);
 
-  useEffect(() => {
-    const fetchUserName = async () => {
-      try {
-        const name = await SecureStore.getItemAsync("user_name");
-        setUserName(name);
-      } catch (err) {
-        console.error("Error fetching user name from SecureStore:", err);
-      }
-    };
+ useFocusEffect(
+    React.useCallback(() => {
+      const fetchUserName = async () => {
+        try {
+          const name = await SecureStore.getItemAsync("user_name");
+          setUserName(name);
+        } catch (err) {
+          console.error("Error fetching user name from SecureStore:", err);
+        }
+      };
 
-    fetchUserName();
-  }, []);
+      fetchUserName();
+    }, [])
+  );
+
 
   const animatedPenguinStyle = useAnimatedStyle(() => ({
     width: penguinSize.value,

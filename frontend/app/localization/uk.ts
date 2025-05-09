@@ -42,6 +42,7 @@ export default {
   reset_password: "Скинути пароль",
   enter_new_password: "Введіть новий пароль",
   new_password: "Новий пароль",
+  old_password:"Старий пароль",
   confirm_password: "Підтвердіть пароль",
   passwords_not_match: "Паролі не співпадають",
   reset_password_error: "Помилка скидання пароля",

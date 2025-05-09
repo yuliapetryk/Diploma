@@ -49,6 +49,17 @@ class MoodLogCreate(BaseModel):
     text: str
 
 
+class ChangePassword(BaseModel):
+    email: EmailStr
+    old_password: str
+    new_password: str
+
+
+class ChangeName(BaseModel):
+    email: EmailStr
+    new_name: str
+
+
 class MoodLogOut(BaseModel):
     id: str
     text: str

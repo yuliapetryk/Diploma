@@ -21,7 +21,9 @@ export default function ProfileScreen() {
   const [showNameInput, setShowNameInput] = useState(false);
   const [showPasswordInput, setShowPasswordInput] = useState(false);
   const [newName, setNewName] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
 
   useEffect(() => {
@@ -42,26 +44,55 @@ export default function ProfileScreen() {
     await SecureStore.deleteItemAsync("user_email");
     router.replace("/root/tabs/welcome");
   };
+const handleUpdate = async (
+  endpoint: string,
+  payload: object,
+  resetFields: () => void
+) => {
+  try {
+    const response = await axios.put(`${API_BASE_URL}/users/${endpoint}`, payload);
+    console.log(`Successfully updated: ${response.data.message}`);
+    setErrorMessage("");
+    resetFields();
+  } catch (error: any) {
+    const errorMsg = error.response?.data?.detail || error.message;
+    setErrorMessage(errorMsg);
 
-  const handleNameChange = async () => {
-    try {
-      await axios.post(`${API_BASE_URL}/users/update-name`, { name: newName });
-      setUserName(newName);
-      setNewName("");
-      setShowNameInput(false);
-    } catch (error) {
-      console.error("Error updating name:", error);
+    if (endpoint === "update-password") {
+      setOldPassword(""); 
     }
-  };
 
-  const handlePasswordChange = async () => {
-    try {
-      await axios.post(`${API_BASE_URL}/users/update-password`, { password: newPassword });
+    console.error(`Error updating ${endpoint}:`, errorMsg);
+  }
+};
+
+
+const handleNameChange = async () => {
+  const email = await SecureStore.getItemAsync("user_email");
+
+  await handleUpdate("update-name", { 
+    email, 
+    new_name: newName 
+  }, () => {
+    setUserName(newName);
+    SecureStore.setItemAsync("user_name", newName);
+    setNewName("");
+    setShowNameInput(false);
+  });
+};
+
+const handlePasswordChange = async () => {
+    const email = await SecureStore.getItemAsync("user_email");
+
+    await handleUpdate("update-password", { 
+      email,
+      old_password: oldPassword,
+      new_password: newPassword 
+    }, () => {
+      setOldPassword("");
       setNewPassword("");
       setShowPasswordInput(false);
-    } catch (error) {
-      console.error("Error updating password:", error);
-    }
+    });
   };
 
   return (
@@ -118,23 +149,45 @@ export default function ProfileScreen() {
           </View>
         )}
 
-        {showPasswordInput && (
+         {showPasswordInput && (
           <View style={styles.inputContainer}>
-            <View
-              style={styles.inputField}>
+            <View style={styles.inputField}>
               <TextInput
-                placeholder={i18n.t("password")}
+                placeholder={i18n.t("old_password")}
                 placeholderTextColor="#555"
-                value={newPassword}
-                onChangeText={setNewPassword}
-                style={{
+                value={oldPassword}
+                onChangeText={setOldPassword}
+                 style={{
                   height: 50,
                   fontSize: 14,
                   color: "#000",
                   fontFamily: "Montserrat_400Regular",
                 }}
+                secureTextEntry
               />
             </View>
+
+            <View style={styles.inputField}>
+              <TextInput
+                placeholder={i18n.t("new_password")}
+                placeholderTextColor="#555"
+                value={newPassword}
+                onChangeText={setNewPassword}
+                 style={{
+                  height: 50,
+                  fontSize: 14,
+                  color: "#000",
+                  fontFamily: "Montserrat_400Regular",
+                }}
+                secureTextEntry
+              />
+            </View>
+            {errorMessage !== "" && (
+          <View style={styles.errorMessageContainer}>
+            <Text style={styles.errorMessageText}>{errorMessage}</Text>
+          </View>
+        )}
+
             <TouchableOpacity style={styles.confirmButton} onPress={handlePasswordChange}>
               <Text style={styles.confirmButtonText}>{i18n.t("confirm")}</Text>
             </TouchableOpacity>
@@ -144,7 +197,7 @@ export default function ProfileScreen() {
         <Text style={styles.subHeaderText}>{i18n.t("or_view")}</Text>
 
         <TouchableOpacity style={styles.button} onPress={() => console.log("Diary")}>
-          <Text style={styles.buttonText}>{i18n.t("diary")}</Text>
+          <Text style={styles.buttonText }>{i18n.t("diary")}</Text>
         </TouchableOpacity>
 
         <Text style={styles.subHeaderText}>{i18n.t("change_language")}</Text>
@@ -209,6 +262,15 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     letterSpacing: 1,
     fontFamily: "Montserrat_400Regular",
+  },
+  errorMessageContainer: {
+    backgroundColor: "transparent",
+    borderRadius: 8,
+  },
+  errorMessageText: {
+    color: "#721c24",
+    fontSize: 14,
+    textAlign: "center",
   },
   button: {
     backgroundColor: "transparent",

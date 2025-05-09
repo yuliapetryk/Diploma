@@ -1,16 +1,21 @@
 import uuid
-
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-
 from app.core.security import get_password_hash
 from app.database import SessionLocal
 from app.db_models import User
-from app.schemas import UserCreate, UserOut, UserLogin, PasswordResetRequest, PasswordResetConfirm
+from app.schemas import (
+    UserCreate,
+    UserOut,
+    UserLogin,
+    PasswordResetRequest,
+    PasswordResetConfirm,
+    ChangePassword,
+    ChangeName
+)
 from app.crud import users as crud_users
 from app.core import security
 from pydantic import BaseModel
-
 from app.utils import send_reset_email
 
 
@@ -97,6 +102,7 @@ def google_login(user_data: GoogleLogin, db: Session = Depends(get_db)):
         "name": user.name,
     }
 
+
 @router.post("/forgot-password")
 def forgot_password(request: PasswordResetRequest, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == request.email).first()
@@ -110,6 +116,7 @@ def forgot_password(request: PasswordResetRequest, db: Session = Depends(get_db)
 
     return {"message": "Password reset link has been sent to your email"}
 
+
 @router.post("/reset-password")
 def reset_password(request: PasswordResetConfirm, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.reset_token == request.token).first()
@@ -117,9 +124,34 @@ def reset_password(request: PasswordResetConfirm, db: Session = Depends(get_db))
         raise HTTPException(status_code=404, detail="Invalid token")
 
     hashed_password = get_password_hash(request.new_password)
-
     user.password_hash = hashed_password
     user.reset_token = None
     db.commit()
 
     return {"message": "Password has been successfully reset"}
+
+
+@router.put("/update-password")
+def change_password(data: ChangePassword, db: Session = Depends(get_db)):
+    user = crud_users.get_user_by_email(db, data.email)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    if not security.verify_password(data.old_password, user.password_hash):
+        raise HTTPException(status_code=403, detail="Old password is incorrect")
+
+    new_hashed_password = security.hash_password(data.new_password)
+    crud_users.update_user_password(db, user.id, new_hashed_password)
+
+    return {"message": "Password updated successfully"}
+
+
+@router.put("/update-name")
+def change_name(data: ChangeName, db: Session = Depends(get_db)):
+    user = crud_users.get_user_by_email(db, data.email)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    crud_users.update_user_name(db, user.id, data.new_name)
+
+    return {"message": "Name updated successfully"}

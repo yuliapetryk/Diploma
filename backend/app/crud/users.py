@@ -33,3 +33,22 @@ def create_user(
 
 def get_user_by_email(db: Session, email: str):
     return db.query(User).filter(User.email == email).first()
+
+def update_user_password(db: Session, user_id: str, new_password_hash: str):
+    user = db.query(User).filter(User.id == user_id).first()
+    if user:
+        user.password_hash = new_password_hash
+        db.commit()
+        db.refresh(user)
+        return user
+    return None
+
+
+def update_user_name(db: Session, user_id: str, new_name: str):
+    user = db.query(User).filter(User.id == user_id).first()
+    if user:
+        user.name = new_name
+        db.commit()
+        db.refresh(user)
+        return user
+    return None
