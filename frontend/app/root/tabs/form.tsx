@@ -19,7 +19,7 @@ import i18n from "../../localization";
 import { images } from "../../../constants/assets";
 import BackButton from "../../../components/BackButton";
 import { API_BASE_URL } from '@env';
-
+import * as SecureStore from "expo-secure-store";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -32,7 +32,7 @@ export default function FormScreen() {
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
-
+  const [userName, setUserName] = useState<string | null>(null);
   const router = useRouter();
 
   const penguinSize = useSharedValue(120);
@@ -53,6 +53,19 @@ export default function FormScreen() {
       showSub.remove();
       hideSub.remove();
     };
+  }, []);
+
+  useEffect(() => {
+    const fetchUserName = async () => {
+      try {
+        const name = await SecureStore.getItemAsync("user_name");
+        setUserName(name);
+      } catch (err) {
+        console.error("Error fetching user name from SecureStore:", err);
+      }
+    };
+
+    fetchUserName();
   }, []);
 
   const animatedPenguinStyle = useAnimatedStyle(() => ({
@@ -134,6 +147,21 @@ export default function FormScreen() {
                   animatedPenguinStyle,
                 ]}
               />
+
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: "600",
+                  textAlign: "center",
+                  color: "#000",
+                  marginBottom: 10,
+                  textTransform: "uppercase",
+                  letterSpacing: 1,
+                  fontFamily: "Montserrat_600SemiBold",
+                }}
+              >
+                {i18n.t("welcome")},  {userName ?? i18n.t("friend")}!
+              </Text>
 
               <Text
                 style={{

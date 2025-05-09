@@ -45,5 +45,7 @@ export default {
   confirm_password: "Підтвердіть пароль",
   passwords_not_match: "Паролі не співпадають",
   reset_password_error: "Помилка скидання пароля",
-  password_reset_success: "Пароль успішно змінено"
+  password_reset_success: "Пароль успішно змінено",
+  friend:"друже",
+  welcome:"Вітаю",
 };

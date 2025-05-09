@@ -33,5 +33,12 @@ export default {
   we_are_happy: "Make your experience with us more personalized",
   welcome_back: "Happy to see you again!",
   wrong_password: "Oops, wrong password. Please try again",
-   google: "or \n Sign in with Google",
+  google: "or \n Sign in with Google",
+  forgot_password_title: "Forgot Password",
+  enter_your_email: "Enter your email to reset your password",
+  send_reset_link: "Send Reset Link",
+  reset_link_sent: "Check your email for the reset link!",
+  error_sending_link: "Failed to send the link. Please try again.",
+  friend:"friend",
+  welcome:"Welcome",
 };
