@@ -2,6 +2,8 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
 import torch.nn.functional as F
 
+from app.db_models import Tip, BreathingExercise, Emotion
+
 MODEL_NAME = "./model"
 
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
@@ -15,12 +17,52 @@ LABELS = [
     "remorse", "sadness", "surprise", "neutral"
 ]
 #
-def predict_emotions(text: str):
+from sqlalchemy.orm import Session
+
+def predict_emotions(text: str, db: Session, language: str = 'en'):
     inputs = tokenizer(text, return_tensors="pt", truncation=True)
     with torch.no_grad():
         outputs = model(**inputs)
         probs = F.softmax(outputs.logits, dim=1).squeeze()
 
     top_indices = torch.topk(probs, 3).indices.tolist()
-    results = [{"label": LABELS[i], "score": float(probs[i])} for i in top_indices]
+    detected_emotions = [LABELS[i] for i in top_indices]
+
+    emotions = db.query(Emotion).filter(Emotion.name.in_(detected_emotions)).all()
+
+    results = []
+    for emotion in emotions:
+        tips = db.query(Tip).filter(Tip.emotion_id == emotion.id).all()
+
+        if tips:
+            tips_data = [{
+                "id": str(t.id),
+                "title": t.title,
+                "description": t.description,
+                "type": t.type.value
+            } for t in tips]
+            results.append({
+                "emotion": emotion.name,
+                "type": "tips",
+                "data": tips_data
+            })
+        else:
+            breathing_exercises = db.query(BreathingExercise).filter(BreathingExercise.emotion_id == emotion.id).all()
+            if breathing_exercises:
+                breathing_data = [{
+                    "id": str(b.id),
+                    "title": b.title,
+                    "description": b.description,
+                    "inhale_duration": b.inhale_duration,
+                    "hold_duration": b.hold_duration,
+                    "exhale_duration": b.exhale_duration,
+                    "cycles": b.cycles
+                } for b in breathing_exercises]
+
+                results.append({
+                    "emotion": emotion.name,
+                    "type": "breathing_exercises",
+                    "data": breathing_data
+                })
+
     return results

@@ -77,37 +77,40 @@ export default function FormScreen() {
     height: penguinSize.value,
   }));
 
-  const handleSubmit = async () => {
+ const handleSubmit = async () => {
     if (!text.trim()) {
-      return;
+        return;
     }
 
     setLoading(true);
     setLoadingMessage(i18n.t("loading_message"));
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/analyze`, {
-        text: text.trim(),
-      });
+        const response = await axios.post(`${API_BASE_URL}/api/analyze`, {
+            text: text.trim(),
+            language: i18n.locale
+        });
 
-      const result = response.data?.result || response.data?.message || "No response.";
 
-      setText("");
-      Keyboard.dismiss();
-      setLoading(false);
-      setLoadingMessage("");
+        const result = response.data?.emotions || "No response.";
+        
+        setText("");
+        Keyboard.dismiss();
+        setLoading(false);
+        setLoadingMessage("");
 
-      router.push({
-        pathname: "/root/tabs/advice",
-        params: { result: JSON.stringify(result) },
-      });
+        router.push({
+            pathname: "/root/tabs/advice",
+            params: { result: JSON.stringify(result) },
+        });
 
     } catch (error) {
-      console.error("Submission error:", error);
-      setLoading(false);
-      setLoadingMessage(i18n.t("loading_error_message"));
+        console.error("Submission error:", error);
+        setLoading(false);
+        setLoadingMessage(i18n.t("loading_error_message"));
     }
-  };
+};
+
 
   return (
     <LinearGradient colors={["#b7f5e3", "#798bd0"]} style={{ flex: 1 }}>

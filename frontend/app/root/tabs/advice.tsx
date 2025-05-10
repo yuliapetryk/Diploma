@@ -1,133 +1,124 @@
-import { useLocalSearchParams, useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
   ScrollView,
   TouchableOpacity,
+  StyleSheet,
 } from "react-native";
+import { useRouter, useLocalSearchParams } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
-import { useEffect, useState } from "react";
-import { API_BASE_URL } from '@env';
+import BackButton from "../../../components/BackButton";
 
 export default function AdviceScreen() {
   const router = useRouter();
   const { result } = useLocalSearchParams();
-  const [parsedResult, setParsedResult] = useState<
-  { label: string; score: number }[]
->([]);
+  const [advice, setAdvice] = useState<any[]>([]);
 
+  // Parse JSON from parameters
   useEffect(() => {
-    try {
-      const singleResult = Array.isArray(result) ? result[0] : result;
-      const parsed = JSON.parse(singleResult);
-      setParsedResult(parsed);
-    } catch {
-      setParsedResult([]);
+    if (result) {
+      const parsedData = JSON.parse(result as string);
+      setAdvice(parsedData);
     }
   }, [result]);
-  
-  return (
-    <LinearGradient
-      colors={["#b7f5e3", "#798bd0"]}
-      style={{ flex: 1, paddingHorizontal: 20, paddingBottom: 40 }}
-    >
-      <ScrollView
-        contentContainerStyle={{
-          flexGrow: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          paddingTop: 60,
-        }}
-      >
-        <Text
-          style={{
-            fontSize: 20,
-            fontWeight: "700",
-            fontFamily: "Montserrat_700Bold",
-            color: "#000",
-            marginBottom: 20,
-            textAlign: "center",
-          }}
-        >
-          Результат аналізу емоцій:
-        </Text>
 
-        {parsedResult.length > 0 ? (
-          parsedResult.map((item, index) => (
-            <View
-              key={index}
-              style={{
-                backgroundColor: "rgba(255, 255, 255, 0.3)",
-                padding: 15,
-                borderRadius: 20,
-                width: "100%",
-                marginBottom: 15,
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 16,
-                  fontFamily: "Montserrat_600SemiBold",
-                  color: "#000",
-                }}
-              >
-                {item.label.toUpperCase()}
-              </Text>
-              <Text
-                style={{
-                  fontSize: 14,
-                  fontFamily: "Montserrat_400Regular",
-                  color: "#000",
-                  marginTop: 5,
-                }}
-              >
-                Вірогідність: {(item.score * 100).toFixed(1)}%
-              </Text>
+  /**
+   * 🔥 Render Tips and Breathing Exercises
+   */
+  const renderAdvice = () => {
+    if (advice.length === 0) return <Text>No advice available.</Text>;
+
+    return advice.map((item, index) => (
+      <View key={index} style={styles.card}>
+        <Text style={styles.emotion}>{item.emotion.toUpperCase()}</Text>
+
+        {item.type === "tips" ? (
+          item.data.map((tip: any, idx: number) => (
+            <View key={idx} style={styles.tipContainer}>
+              <Text style={styles.title}>{tip.title}</Text>
+              <Text style={styles.description}>{tip.description}</Text>
             </View>
           ))
         ) : (
-          <Text
-            style={{
-              fontSize: 16,
-              fontFamily: "Montserrat_400Regular",
-              fontStyle: "italic",
-              color: "#555",
-              textAlign: "center",
-            }}
-          >
-            Немає даних для відображення.
-          </Text>
+          item.data.map((exercise: any, idx: number) => (
+            <View key={idx} style={styles.tipContainer}>
+              <Text style={styles.title}>{exercise.title}</Text>
+              <Text style={styles.description}>{exercise.description}</Text>
+              <Text style={styles.duration}>Inhale: {exercise.inhale_duration} sec, Hold: {exercise.hold_duration} sec, Exhale: {exercise.exhale_duration} sec, Cycles: {exercise.cycles}</Text>
+            </View>
+          ))
         )}
-      </ScrollView>
+      </View>
+    ));
+  };
 
-      <View
-        style={{
-          width: "90%",
-          maxWidth: 400,
-          height: 70,
-          borderRadius: 40,
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center",
-          paddingHorizontal: 15,
-          alignSelf: "center",
+  /**
+   * 🔥 Main Render
+   */
+  return (
+    <LinearGradient colors={["#b7f5e3", "#798bd0"]} style={{ flex: 1 }}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => router.back()}>
+          <Ionicons name="arrow-back" size={28} color="#000" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Advice and Exercises</Text>
+      </View>
+
+      <ScrollView
+        contentContainerStyle={{
+          padding: 15,
+          paddingBottom: 70,
         }}
       >
-        <TouchableOpacity
-          style={{
-            flex: 1,
-            height: 50,
-            borderRadius: 25,
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "rgba(255,255,255,0.3)",
-          }}
-          onPress={() => router.back()}
-        >
-          <Ionicons name="arrow-back" size={24} color="black" />
-        </TouchableOpacity>
-      </View>
+        {renderAdvice()}
+      </ScrollView>
+      <BackButton></BackButton>
     </LinearGradient>
   );
 }
+
+const styles = StyleSheet.create({
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 15,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginLeft: 10,
+    color: "#000",
+  },
+  card: {
+    backgroundColor: "#ffffff",
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 15,
+  },
+  emotion: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "#4A4A4A",
+  },
+  tipContainer: {
+    marginBottom: 10,
+  },
+  title: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#333",
+  },
+  description: {
+    fontSize: 13,
+    color: "#666",
+    marginBottom: 5,
+  },
+  duration: {
+    fontSize: 12,
+    color: "#888",
+    fontStyle: "italic",
+  }
+});

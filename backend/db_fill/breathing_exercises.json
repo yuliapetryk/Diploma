@@ -1,0 +1,143 @@
+[
+  {
+    "title": "4-7-8 Breathing Technique",
+    "description": "This method is effective in calming the nervous system and reducing tension associated with anger",
+    "inhale_duration": 4,
+    "hold_duration": 7,
+    "exhale_duration": 8,
+    "cycles": 10,
+    "emotion": "anger",
+    "language": "en"
+  },
+  {
+    "title": "Box Breathing",
+    "description": "Repeat this cycle to regain calmness and control",
+    "inhale_duration": 4,
+    "hold_duration": 4,
+    "exhale_duration": 4,
+    "cycles": 10,
+    "emotion": "annoyance",
+    "language": "en"
+  },
+  {
+    "title": "Grounding Breath",
+    "description": "This breathing helps to activate the parasympathetic nervous system, reducing fear",
+    "inhale_duration": 5,
+    "hold_duration": 2,
+    "exhale_duration": 5,
+    "cycles": 10,
+    "emotion": "fear",
+    "language": "en"
+  },
+  {
+    "title": "5-5-5 Breathing",
+    "description": "This technique balances oxygen and reduces anxiety quickly",
+    "inhale_duration": 5,
+    "hold_duration": 5,
+    "exhale_duration": 5,
+    "cycles": 10,
+    "emotion": "nervousness",
+    "language": "en"
+  },
+  {
+    "title": "Cleansing Breath",
+    "description": "This method is often used to clear the mind and \"refresh\" emotional state",
+    "inhale_duration": 3,
+    "hold_duration": 2,
+    "exhale_duration": 5,
+    "cycles": 10,
+    "emotion": "disgust",
+    "language": "en"
+  },
+  {
+    "title": "2-4-6 Breathing",
+    "description": "This exercise helps to slow down your response, especially when you are caught off guard",
+    "inhale_duration": 2,
+    "hold_duration": 4,
+    "exhale_duration": 6,
+    "cycles": 10,
+    "emotion": "surprise",
+    "language": "en"
+  },
+  {
+    "title": "Balanced Breathing",
+    "description": "Balanced breathing promotes calmness and emotional regulation when feeling exposed or judged",
+    "inhale_duration": 4,
+    "hold_duration": 4,
+    "exhale_duration": 4,
+    "cycles": 10,
+    "emotion": "embarrassment",
+    "language": "en"
+  },
+
+    {
+      "title": "Техніка дихання 4-7-8",
+      "description": "Цей метод ефективно заспокоює нервову систему і знижує напругу, пов'язану зі злістю.",
+      "inhale_duration": 4,
+      "hold_duration": 7,
+      "exhale_duration": 8,
+      "cycles": 10,
+      "emotion": "anger",
+      "language": "uk"
+    },
+    {
+      "title": "Дихання за схемою 'Квадрат'",
+      "description": "Повторюйте цей цикл, щоб відновити спокій та контроль.",
+      "inhale_duration": 4,
+      "hold_duration": 4,
+      "exhale_duration": 4,
+      "cycles": 10,
+      "emotion": "annoyance",
+      "language": "uk"
+    },
+    {
+      "title": "Дихання для заземлення",
+      "description": "Ця дихальна практика допомагає активувати парасимпатичну нервову систему, знижуючи страх.",
+      "inhale_duration": 5,
+      "hold_duration": 2,
+      "exhale_duration": 5,
+      "cycles": 10,
+      "emotion": "fear",
+      "language": "uk"
+    },
+    {
+      "title": "Дихання 5-5-5",
+      "description": "Ця техніка балансує кисень та швидко знижує рівень тривоги.",
+      "inhale_duration": 5,
+      "hold_duration": 5,
+      "exhale_duration": 5,
+      "cycles": 10,
+      "emotion": "nervousness",
+      "language": "uk"
+    },
+    {
+      "title": "Дихання для очищення",
+      "description": "Цей метод часто використовується для очищення розуму та \"освіження\" емоційного стану.",
+      "inhale_duration": 3,
+      "hold_duration": 2,
+      "exhale_duration": 5,
+      "cycles": 10,
+      "emotion": "disgust",
+      "language": "uk"
+    },
+    {
+      "title": "Дихання 2-4-6",
+      "description": "Ця вправа допомагає сповільнити вашу реакцію, особливо коли вас щось захопило зненацька.",
+      "inhale_duration": 2,
+      "hold_duration": 4,
+      "exhale_duration": 6,
+      "cycles": 10,
+      "emotion": "surprise",
+      "language": "uk"
+    },
+    {
+      "title": "Збалансоване дихання",
+      "description": "Збалансоване дихання сприяє спокою та емоційному регулюванню, коли ви відчуваєте себе вразливим або під осудом.",
+      "inhale_duration": 4,
+      "hold_duration": 4,
+      "exhale_duration": 4,
+      "cycles": 10,
+      "emotion": "embarrassment",
+      "language": "uk"
+    }
+]

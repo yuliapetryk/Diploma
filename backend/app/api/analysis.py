@@ -1,8 +1,7 @@
-from fastapi import APIRouter
-
-from app.database import SessionLocal
+from fastapi import FastAPI, Depends, APIRouter, Request
+from sqlalchemy.orm import Session
+from app.database import SessionLocal, engine, Base
 from app.model import predict_emotions
-from app.schemas import TextInput
 
 router = APIRouter()
 
@@ -16,11 +15,14 @@ def get_db():
 
 
 @router.post("/analyze")
-async def analyze(input: TextInput):
-    print("Received:", input.text)
+async def analyze_text(request: Request, db: Session = Depends(get_db)):
 
-    results = predict_emotions(input.text)
+    body = await request.json()
+    text = body.get("text")
+    language = body.get("language", "en")
 
-    print("Response:", results)
+    if not text:
+        return {"error": "Text is required."}
 
-    return {"result": results}
+    result = predict_emotions(text, db, language)
+    return {"emotions": result}
