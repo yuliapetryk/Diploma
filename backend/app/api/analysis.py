@@ -19,7 +19,7 @@ async def analyze_text(request: Request, db: Session = Depends(get_db)):
 
     body = await request.json()
     text = body.get("text")
-    language = body.get("language", "en")
+    language = body.get("language", "uk")
 
     if not text:
         return {"error": "Text is required."}

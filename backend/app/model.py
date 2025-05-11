@@ -16,23 +16,32 @@ LABELS = [
     "joy", "love", "nervousness", "optimism", "pride", "realization", "relief",
     "remorse", "sadness", "surprise", "neutral"
 ]
-#
+
 from sqlalchemy.orm import Session
 
-def predict_emotions(text: str, db: Session, language: str = 'en'):
+def predict_emotions(text: str, db: Session, language: str = 'uk'):
     inputs = tokenizer(text, return_tensors="pt", truncation=True)
     with torch.no_grad():
         outputs = model(**inputs)
         probs = F.softmax(outputs.logits, dim=1).squeeze()
 
-    top_indices = torch.topk(probs, 3).indices.tolist()
-    detected_emotions = [LABELS[i] for i in top_indices]
+    scores = {LABELS[i]: probs[i].item() for i in range(len(LABELS))}
+    sorted_emotions = sorted(scores.items(), key=lambda x: x[1], reverse=True)
 
-    emotions = db.query(Emotion).filter(Emotion.name.in_(detected_emotions)).all()
+    print("\n🔹 Detected Emotion Scores:")
+    for emotion, score in sorted_emotions:
+        print(f"{emotion}: {score:.4f}")
+
+    top_emotions = [emotion for emotion, _ in sorted_emotions[:3]]
+    emotions = db.query(Emotion).filter(Emotion.name.in_(top_emotions)).all()
+    emotions.sort(key=lambda x: top_emotions.index(x.name))
 
     results = []
     for emotion in emotions:
-        tips = db.query(Tip).filter(Tip.emotion_id == emotion.id).all()
+        tips = db.query(Tip).filter(
+            Tip.emotion_id == emotion.id,
+            Tip.language == language
+        ).all()
 
         if tips:
             tips_data = [{
@@ -46,8 +55,13 @@ def predict_emotions(text: str, db: Session, language: str = 'en'):
                 "type": "tips",
                 "data": tips_data
             })
-        else:
-            breathing_exercises = db.query(BreathingExercise).filter(BreathingExercise.emotion_id == emotion.id).all()
+
+        if not tips:
+            breathing_exercises = db.query(BreathingExercise).filter(
+                BreathingExercise.emotion_id == emotion.id,
+                BreathingExercise.language == language
+            ).all()
+
             if breathing_exercises:
                 breathing_data = [{
                     "id": str(b.id),
@@ -64,5 +78,11 @@ def predict_emotions(text: str, db: Session, language: str = 'en'):
                     "type": "breathing_exercises",
                     "data": breathing_data
                 })
+
+    results.sort(key=lambda x: top_emotions.index(x["emotion"]))
+
+    print("\n Final Sorted Results:")
+    for item in results:
+        print(f"{item['emotion']}: {item['type']} - {len(item['data'])} items")
 
     return results
