@@ -189,6 +189,27 @@
     "language": "en"
   },
   {
+    "title": "Reflect on a moment of love",
+    "description": "Think about a recent moment when you felt deep love or affection – whether for a person, a pet, or even an experience. Write about that moment in detail: who or what inspired that feeling? How did it make you feel, and what did you appreciate most about it? By reflecting on moments of love, you strengthen your sense of connection and gratitude. This practice also serves as a reminder of the warmth and joy that love brings into your life.",
+    "type": "writing_exercise",
+    "emotion": "love",
+    "language": "en"
+  },
+  {
+    "title": "Embrace Optimism and Write About Hope",
+    "description": "Think about something you are hopeful or optimistic about in your life. It could be a future event, a personal goal, or a positive change you are working towards. Write about why you are optimistic and what steps you are taking to bring that hope to life. By focusing on your hopes and aspirations, you can enhance your sense of optimism and stay motivated to achieve your goals. This exercise can also help you identify any small actions you can take now to move closer to what you want.",
+    "type": "writing_exercise",
+    "emotion": "optimism",
+    "language": "en"
+  },
+  {
+    "title": "Identifying Your Current State",
+    "description": "When you experience a neutral state or cannot precisely identify your emotions, it's helpful to pause and try to understand your feelings. Try writing down everything that is currently happening in your life: what events are influencing you, what thoughts come to mind most often, and how your body feels. Ask yourself questions like: \"Is there something that bothers me?\" or \"Do I feel satisfaction from something?\" Sometimes a neutral state is an opportunity to pause, evaluate your condition, and notice small but important things that often go unnoticed. Writing about your state can help you find balance and potentially discover new feelings or insights.",
+    "type": "writing_exercise",
+    "emotion": "neutral",
+    "language": "en"
+  },
+  {
     "title": "Зупинись і заземлися",
     "description": "Коли ти відчуваєш збентеження, дай своєму розуму перепочити. Спробуй швидку техніку заземлення 5-4-3-2-1: знайди п’ять речей, які ти бачиш, чотири, до яких можеш доторкнутися, три, які чуєш, дві, які можеш понюхати, і одну, яку відчуваєш на смак. Така уважна пауза допоможе очистити розум від тривоги. Нагадай собі, що нормально не знати всіх відповідей одразу – усі часом відчувають себе загубленими.",
     "type": "tip",
@@ -363,6 +384,7 @@
     "emotion": "joy",
     "language": "uk"
   },
+
   {
     "title": "Згадай момент гордості",
     "description": "Коли ти відчуваєш гордість за своє досягнення, зафіксуй цей момент у письмовій формі. Опиши, чого ти досягнув і як ти цього досягнув – які зусилля, навички або рішення допомогли тобі здобути успіх. Наприклад, якщо ти завершив важливий проект або досягнув особистої мети, опиши кроки, які ти пройшов, і сильні сторони, які ти виявив. Також відзнач, чому це досягнення для тебе важливе. Записування своїх успіхів допомагає відчути гордість ще раз і підсилити впевненість у собі. Це також стане корисним нагадуванням про твої можливості під час майбутніх викликів.",
@@ -375,6 +397,27 @@
     "description": "Після хвилі полегшення (можливо, коли стресова ситуація вирішилася або переживання виявилися марними) спробуй зробити невеликий запис, щоб перетворити це відчуття в довготривалу позитивну емоцію. Опиши, що сталося – що тебе турбувало і як ситуація вирішилася на краще. Відзнач, за що ти вдячний зараз, коли все обійшлося. Також можеш записати, який урок ти виніс з цього досвіду. Зосередження на позитивній стороні ситуації допомагає зміцнити оптимістичний настрій; пошук світлих моментів пов'язаний з кращим подоланням стресу і зниженням тривожності. Записуючи ці моменти, ти краще усвідомлюєш, що все може вирішитися добре, і це підвищує твою стійкість перед майбутніми випробуваннями.",
     "type": "writing_exercise",
     "emotion": "relief",
+    "language": "uk"
+  },
+  {
+    "title": "Визначення поточного стану",
+    "description": "Коли ти відчуваєш нейтральний стан або не можеш точно визначити свої емоції, корисно зупинитися і спробувати усвідомити свої відчуття. Спробуй записати все, що зараз відбувається у твоєму житті: які події впливають на тебе, які думки найчастіше приходять до голови, як почувається твоє тіло. Постав собі питання: \"Чи є щось, що мене турбує?\" або \"Чи відчуваю я задоволення від чогось?\". Іноді нейтральний стан – це можливість зупинитися, оцінити свій стан і помітити дрібні, але важливі речі, які зазвичай залишаються непоміченими. Письмовий аналіз допоможе тобі знайти баланс і, можливо, відкрити нові відчуття або розуміння.",
+    "type": "writing_exercise",
+    "emotion": "neutral",
+    "language": "uk"
+  },
+  {
+    "title": "Пригадай момент любові",
+    "description": "Згадай нещодавній момент, коли ти відчував(ла) глибоку любов або прив'язаність – до людини, домашньої тварини або навіть певного досвіду. Опиши цей момент детально: хто або що надихнуло це почуття? Як це змусило тебе почуватися, і що ти найбільше цінував(ла) в цьому моменті? Роздуми над моментами любові зміцнюють почуття зв'язку та вдячності. Це також служить нагадуванням про тепло і радість, які приносить любов у твоє життя.",
+    "type": "writing_exercise",
+    "emotion": "love",
+    "language": "uk"
+  },
+  {
+    "title": "Прийми оптимізм і напиши про надію",
+    "description": "Подумай про те, що викликає у тебе надію або оптимізм у житті. Це може бути майбутня подія, особиста мета або позитивні зміни, до яких ти прагнеш. Опиши, чому ти відчуваєш оптимізм і які кроки ти робиш, щоб реалізувати цю надію. Зосереджуючись на своїх надіях і прагненнях, ти підсилюєш своє відчуття оптимізму і залишаєшся вмотивованим(ою) досягати своїх цілей. Ця вправа також допоможе визначити невеликі дії, які ти можеш зробити зараз, щоб наблизитися до бажаного.",
+    "type": "writing_exercise",
+    "emotion": "optimism",
     "language": "uk"
   }
 ]
