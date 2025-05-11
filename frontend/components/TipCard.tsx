@@ -10,7 +10,7 @@ interface TipCardProps {
 const TipCard: React.FC<TipCardProps> = ({ title, description, type }) => {
   return (
     <View style={styles.card}>
-      <Text style={styles.type}>{type.toUpperCase()}</Text>
+      <Text style={styles.advice}>{"Дозволь дати тобі невелику пораду"}</Text>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.description}>{description}</Text>
     </View>
@@ -19,28 +19,38 @@ const TipCard: React.FC<TipCardProps> = ({ title, description, type }) => {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#ffffff',
-    borderRadius: 10,
     padding: 15,
     marginBottom: 15,
-    borderColor: '#798bd0',
-    borderWidth: 1,
+    borderTopColor: "black",
+    borderTopWidth: 1
   },
-  type: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#4A4A4A',
-    marginBottom: 5,
+  advice: {
+    fontSize: 12,
+    fontWeight: "300",
+    textAlign: "left",
+    color: "#000",
+    marginBottom: 10,
+    textTransform: "uppercase",
+    letterSpacing: 1,
+    fontFamily: "Montserrat_400Regular",
   },
   title: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 5,
+    fontSize: 20,
+    fontWeight: "600",
+    textAlign: "left",
+    color: "#000",
+    marginBottom: 10,
+    letterSpacing: 1,
+    fontFamily: "Montserrat_600SemiBold",
   },
   description: {
-    fontSize: 14,
-    color: '#666',
+    fontSize: 16,
+    fontWeight: "300",
+    textAlign: "left",
+    color: "#000",
+    marginBottom: 10,
+    letterSpacing: 1,
+    fontFamily: "Montserrat_400Regular",
   },
 });
 

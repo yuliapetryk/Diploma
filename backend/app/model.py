@@ -48,11 +48,10 @@ def predict_emotions(text: str, db: Session, language: str = 'uk'):
                 "id": str(t.id),
                 "title": t.title,
                 "description": t.description,
-                "type": t.type.value
+                "type": t.type.value  # <-- type is inside the data
             } for t in tips]
             results.append({
                 "emotion": emotion.name,
-                "type": "tips",
                 "data": tips_data
             })
 
@@ -70,12 +69,12 @@ def predict_emotions(text: str, db: Session, language: str = 'uk'):
                     "inhale_duration": b.inhale_duration,
                     "hold_duration": b.hold_duration,
                     "exhale_duration": b.exhale_duration,
-                    "cycles": b.cycles
+                    "cycles": b.cycles,
+                    "type": "breathing_exercise"  # <-- type is defined here for the card to understand
                 } for b in breathing_exercises]
 
                 results.append({
                     "emotion": emotion.name,
-                    "type": "breathing_exercises",
                     "data": breathing_data
                 })
 
@@ -83,6 +82,7 @@ def predict_emotions(text: str, db: Session, language: str = 'uk'):
 
     print("\n Final Sorted Results:")
     for item in results:
-        print(f"{item['emotion']}: {item['type']} - {len(item['data'])} items")
+        print(f"{item['emotion']}: {len(item['data'])} items")
 
+    print(results)
     return results

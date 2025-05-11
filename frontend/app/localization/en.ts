@@ -50,5 +50,13 @@ export default {
   change_language: "or change language",
   confirm: "Confirm",
   loading_message: "Wait, we are analysing your status...",
-  loading_error_message: "Failed to send. Please try again"
+  loading_error_message: "Failed to send. Please try again",
+  advice_title: "Here is your advice, {{name}}",
+  no_advice_available: "No advice available.",
+  no_data_available: "No data available.",
+  recognized_emotions: "We recognized the following emotions:",
+  enter_your_thoughts: "Enter Your Thoughts",
+  placeholder_exercise: "Write your thoughts here...",
+  main_emotion: "The main emotion we recognized in the description you gave us is",
+  secondary_emotions: "We also found notes of",
 };

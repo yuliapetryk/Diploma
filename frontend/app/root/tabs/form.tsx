@@ -56,7 +56,7 @@ export default function FormScreen() {
     };
   }, []);
 
- useFocusEffect(
+  useFocusEffect(
     React.useCallback(() => {
       const fetchUserName = async () => {
         try {
@@ -71,45 +71,45 @@ export default function FormScreen() {
     }, [])
   );
 
-
   const animatedPenguinStyle = useAnimatedStyle(() => ({
     width: penguinSize.value,
     height: penguinSize.value,
   }));
 
- const handleSubmit = async () => {
+  const handleSubmit = async () => {
     if (!text.trim()) {
-        return;
+      return;
     }
 
     setLoading(true);
     setLoadingMessage(i18n.t("loading_message"));
 
     try {
-        const response = await axios.post(`${API_BASE_URL}/api/analyze`, {
-            text: text.trim(),
-            language: i18n.locale
-        });
+      console.log("API URL:", `${API_BASE_URL}/api/analyze`);
+      const response = await axios.post(`${API_BASE_URL}/api/analyze`, {
+        text: text.trim(),
+        language: i18n.locale
+      });
 
 
-        const result = response.data?.emotions || "No response.";
-        
-        setText("");
-        Keyboard.dismiss();
-        setLoading(false);
-        setLoadingMessage("");
+      const result = response.data?.emotions || "No response.";
 
-        router.push({
-            pathname: "/root/tabs/advice",
-            params: { result: JSON.stringify(result) },
-        });
+      setText("");
+      Keyboard.dismiss();
+      setLoading(false);
+      setLoadingMessage("");
+
+      router.push({
+        pathname: "/root/tabs/advice",
+        params: { result: JSON.stringify(result) },
+      });
 
     } catch (error) {
-        console.error("Submission error:", error);
-        setLoading(false);
-        setLoadingMessage(i18n.t("loading_error_message"));
+      console.error("Submission error:", error);
+      setLoading(false);
+      setLoadingMessage(i18n.t("loading_error_message"));
     }
-};
+  };
 
 
   return (
@@ -132,9 +132,9 @@ export default function FormScreen() {
           }}
         >
 
-         {userName ? (
+          {userName ? (
             <TouchableOpacity onPress={() => router.push("/root/tabs/profile")}>
-              <Ionicons name="person-outline" size={24} color="black"  />
+              <Ionicons name="person-outline" size={24} color="black" />
             </TouchableOpacity>
           ) : (
             <TouchableOpacity onPress={() => router.push("/root/tabs/sign-in")}>
@@ -256,28 +256,29 @@ export default function FormScreen() {
                   {loadingMessage}
                 </Text>
               ) : null}
-              
-          <TouchableOpacity
-            onPress={handleSubmit}
-            disabled={text.trim().length === 0}
-            style={{
-              flex: 2,
-              height: 50,
-              borderRadius: 25,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Text
-              style={{
-                color: text.trim().length === 0 ? "transparent" : "#000",
-                fontSize: 18,
-                fontFamily: "Montserrat_600SemiBold",
-              }}
-            >
-              {i18n.t("submit")}
-            </Text>
-          </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={handleSubmit}
+                disabled={text.trim().length === 0}
+                style={{
+                  flex: 2,
+                  height: 50,
+                  borderRadius: 25,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    color: text.trim() ? "#5661b3" : "rgba(86, 97, 179, 0.5)",
+                    fontSize: 18,
+                    fontFamily: "Montserrat_600SemiBold",
+                    opacity: text.trim() ? 1 : 0.5,
+                  }}
+                >
+                  {i18n.t("submit")}
+                </Text>
+              </TouchableOpacity>
             </ScrollView>
           </KeyboardAvoidingView>
         </TouchableWithoutFeedback>
@@ -297,7 +298,6 @@ export default function FormScreen() {
             gap: 10,
           }}
         >
-
 
           <TouchableOpacity
             style={{
