@@ -94,5 +94,11 @@ export default {
   we_also_found_notes_of: "Також присутні такі нотки, як: {{secondEmotion}} та {{thirdEmotion}}",
   enter_your_thought: "Введіть свої думки",
   placeholder_exercise: "Напишіть свої думки тут...",
-
+  stop:"Зупинити",
+  start:"Почати",
+  congratulations:"Вітаю! Ви чудово впорались із цією вправою",
+  congratulations2:"Сподіваюсь, вам покращало. Якщо маєте бажання, можемо повторити",
+  inhale: "Вдихайте",
+  hold: "Тримайте",
+  exhale: "Видихайте",
 };

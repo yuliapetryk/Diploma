@@ -6,5 +6,6 @@ export const penguinImages = {
   "звилювання": require("../assets/images/confusion_embarrassment_excitement.png"),
   "любов": require("../assets/images/love.png"),
   "смуток": require("../assets/images/sadness.png"),
+  "відраза": require("../assets/images/sadness.png"),
   "нейтральна емоція": require("../assets/images/neutral.png"),
 };

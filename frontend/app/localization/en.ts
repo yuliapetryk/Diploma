@@ -59,4 +59,11 @@ export default {
   placeholder_exercise: "Write your thoughts here...",
   main_emotion: "The main emotion we recognized in the description you gave us is",
   secondary_emotions: "We also found notes of",
+  inhale: "Inhale",
+  hold: "Hold",
+  exhale: "Exhale",
+  congratulations: "Congratulations",
+  congratulations2: "You've successfully completed the exercise!",
+  start: "Start",
+  stop: "Stop"
 };

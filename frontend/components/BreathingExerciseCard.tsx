@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TouchableOpacity, Animated, StyleSheet } from 'react-native';
+import i18n from "../app/localization";
 
 interface BreathingExerciseProps {
   title: string;
@@ -18,49 +19,93 @@ const BreathingExercise: React.FC<BreathingExerciseProps> = ({
   exhale_duration,
   cycles,
 }) => {
-  const [running, setRunning] = useState(false);
   const [cycleCount, setCycleCount] = useState(0);
-  const [phase, setPhase] = useState<'inhale' | 'hold' | 'exhale'>('inhale');
-  const size = useState(new Animated.Value(100))[0];
+  const [phase, setPhase] = useState<'inhale' | 'hold' | 'exhale' | 'complete'>('inhale');
+  const [finished, setFinished] = useState(false);
+  const [stopped, setStopped] = useState(false);
+
+  const running = useRef(false);
+  const size = useRef(new Animated.Value(100)).current;
+  const timeouts = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  const clearAllTimeouts = () => {
+    timeouts.current.forEach(clearTimeout);
+    timeouts.current = [];
+  };
+  const getPhaseText = (phase: string) => {
+  switch (phase) {
+    case 'inhale':
+      return i18n.t('inhale');
+    case 'hold':
+      return i18n.t('hold');
+    case 'exhale':
+      return i18n.t('exhale');
+    default:
+      return "";
+  }
+};
+
 
   const startExercise = () => {
-    if (!running) {
-      setRunning(true);
+    if (!running.current) {
+      console.log("Starting Exercise...");
+      setFinished(false);
+      setStopped(false);
+      running.current = true;
       setCycleCount(0);
       setPhase('inhale');
+      size.setValue(100);
+      animateShape('inhale');
     }
   };
 
   const stopExercise = () => {
-    setRunning(false);
-    setCycleCount(0);
+    console.log("Stopping Exercise...");
+    running.current = false;
+    setStopped(true);
+    clearAllTimeouts();
     size.setValue(100);
+    setPhase('complete');
   };
 
   const animateShape = (newPhase: 'inhale' | 'hold' | 'exhale') => {
-    if (!running) return;
+    if (!running.current) return;
 
     let newSize = 100;
-    if (newPhase === 'inhale') newSize = 150;
-    if (newPhase === 'exhale') newSize = 80;
+    let duration = inhale_duration * 1000;
+
+    if (newPhase === 'inhale') {
+      newSize = 150;
+      duration = inhale_duration * 1000;
+    } else if (newPhase === 'exhale') {
+      newSize = 80;
+      duration = exhale_duration * 1000;
+    } else if (newPhase === 'hold') {
+      duration = hold_duration * 1000;
+    }
 
     Animated.timing(size, {
       toValue: newSize,
-      duration: newPhase === 'hold' ? hold_duration * 1000 : inhale_duration * 1000,
+      duration,
       useNativeDriver: false,
     }).start(() => {
-      if (!running) return;
+      if (!running.current) return;
 
       if (newPhase === 'inhale') {
         setPhase('hold');
-        setTimeout(() => {
-          animateShape('exhale');
-          setPhase('exhale');
+        const holdTimeout = setTimeout(() => {
+          if (running.current) {
+            animateShape('exhale');
+            setPhase('exhale');
+          }
         }, hold_duration * 1000);
+        timeouts.current.push(holdTimeout);
       } else if (newPhase === 'exhale') {
         setCycleCount((prev) => {
           const nextCycle = prev + 1;
           if (nextCycle >= cycles) {
+            setPhase('complete');
+            setFinished(true);
             stopExercise();
           } else {
             setPhase('inhale');
@@ -73,38 +118,47 @@ const BreathingExercise: React.FC<BreathingExerciseProps> = ({
   };
 
   useEffect(() => {
-    if (running && phase === 'inhale') {
-      animateShape('inhale');
-    }
-  }, [running]);
+    return () => clearAllTimeouts();
+  }, []);
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.description}>{description}</Text>
 
-      <Animated.View
-        style={[
-          styles.shape,
-          {
-            width: size,
-            height: size,
-            backgroundColor: phase === 'inhale' ? '#798bd0' : phase === 'hold' ? '#555' : '#b7f5e3',
-          },
-        ]}
-      />
+      {!stopped && (
+        <Animated.View
+          style={[
+            styles.shape,
+            {
+              width: size,
+              height: size,
+              backgroundColor: phase === 'inhale' ? '#798bd0' : phase === 'hold' ? '#808080' : '#b7f5e3',
+            },
+          ]}
+        />
+      )}
 
-      <Text style={styles.phaseText}>{`Phase: ${phase}`}</Text>
-      <Text style={styles.cycleText}>{`Cycle: ${cycleCount} / ${cycles}`}</Text>
+      {!finished && !stopped ? (
+        <>
+          <Text style={styles.phaseText}>{`${getPhaseText(phase)}`}</Text>
+          <Text style={styles.cycleText}>{`${cycleCount} / ${cycles}`}</Text>
+        </>
+      ) : (
+        <>
+          <Text style={styles.congratulations}>{i18n.t("congratulations")}</Text>
+          <Text style={styles.description}>{i18n.t("congratulations2")}</Text>
+        </>
+      )}
 
       <View style={styles.buttonContainer}>
-        {!running ? (
+        {!running.current ? (
           <TouchableOpacity style={styles.button} onPress={startExercise}>
-            <Text style={styles.buttonText}>Start</Text>
+            <Text style={styles.buttonText}> {i18n.t("start")}</Text>
           </TouchableOpacity>
         ) : (
           <TouchableOpacity style={styles.button} onPress={stopExercise}>
-            <Text style={styles.buttonText}>Stop</Text>
+            <Text style={styles.buttonText}> {i18n.t("stop")}</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -114,31 +168,72 @@ const BreathingExercise: React.FC<BreathingExerciseProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
-    padding: 20,
+    padding: 15,
+    borderTopColor: "black",
+    borderTopWidth: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  advice: {
+    fontSize: 12,
+    fontWeight: "300",
+    textAlign: "left",
+    color: "#000",
+    marginBottom: 10,
+    textTransform: "uppercase",
+    letterSpacing: 1,
+    fontFamily: "Montserrat_400Regular",
   },
   title: {
     fontSize: 20,
-    fontWeight: '600',
+    fontWeight: "600",
+    textAlign: "left",
+    color: "#000",
     marginBottom: 10,
+    letterSpacing: 1,
+    fontFamily: "Montserrat_600SemiBold",
   },
   description: {
     fontSize: 16,
-    marginBottom: 20,
-    textAlign: 'center',
+    fontWeight: "300",
+    textAlign: "left",
+    color: "#000",
+    marginBottom: 10,
+    letterSpacing: 1,
+    fontFamily: "Montserrat_400Regular",
   },
   shape: {
     borderRadius: 50,
     marginBottom: 20,
   },
   phaseText: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 5,
+    fontSize: 14,
+    fontWeight: "300",
+    textAlign: "center",
+    color: "#000",
+    marginBottom: 10,
+    textTransform: "uppercase",
+    letterSpacing: 1,
+    fontFamily: "Montserrat_400Regular",
   },
   cycleText: {
     fontSize: 14,
-    marginBottom: 15,
+    fontWeight: "300",
+    textAlign: "center",
+    color: "#000",
+    marginBottom: 10,
+    textTransform: "uppercase",
+    letterSpacing: 1,
+    fontFamily: "Montserrat_400Regular",
+  },
+  congratulations: {
+    color: "#5661b3",
+    fontSize: 18,
+    fontFamily: "Montserrat_600SemiBold",
+    textTransform: "uppercase",
+    letterSpacing: 1,
+    marginVertical: 10,
+    textAlign: 'center',
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -146,14 +241,16 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   button: {
-    backgroundColor: '#798bd0',
-    padding: 10,
-    borderRadius: 5,
-    margin: 5,
+    backgroundColor: "transparent",
+    borderRadius: 25,
+    paddingVertical: 12,
+    alignItems: "center",
+    width: "100%",
   },
   buttonText: {
-    color: '#fff',
-    fontSize: 16,
+    color: "#5661b3",
+    fontSize: 18,
+    fontFamily: "Montserrat_600SemiBold",
   },
 });
 
