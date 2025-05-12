@@ -15,7 +15,6 @@ import axios from "axios";
 import i18n from "../../localization";
 import BackButton from "../../../components/BackButton";
 import { images } from "../../../constants/assets";
-import { API_BASE_URL } from '@env';
 
 export default function RegisterScreen() {
   const router = useRouter();
@@ -25,7 +24,7 @@ export default function RegisterScreen() {
   const [password, setPassword] = useState("");
   const [sex, setSex] = useState<"male" | "female" | "other" | null>(null);
   const [error, setError] = useState("");
-
+  const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL;
   const handleRegister = async () => {
     try {
       const response = await axios.post(`${API_BASE_URL}/users/register`, {

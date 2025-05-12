@@ -15,7 +15,7 @@ import { Ionicons } from "@expo/vector-icons";
 import BackButton from "../../../components/BackButton";
 import LanguageSwitcher from "./language_switcher";
 import axios from "axios";
-import { API_BASE_URL } from "@env";
+
 
 export default function ProfileScreen() {
   const [userName, setUserName] = useState<string | null>(null);
@@ -26,6 +26,7 @@ export default function ProfileScreen() {
   const [newPassword, setNewPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
+  const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL;
 
   useEffect(() => {
     const fetchUserName = async () => {

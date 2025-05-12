@@ -14,7 +14,7 @@ import i18n from "../../localization";
 import BackButton from "../../../components/BackButton";
 import { images } from "../../../constants/assets";
 import axios from "axios";
-import { API_BASE_URL } from "@env";
+
 
 export default function ResetPasswordScreen() {
   const router = useRouter();
@@ -23,7 +23,7 @@ export default function ResetPasswordScreen() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-
+  const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL;
   const handlePasswordReset = async () => {
     if (password !== confirmPassword) {
       setError(i18n.t("passwords_not_match"));

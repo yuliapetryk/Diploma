@@ -14,12 +14,11 @@ import i18n from "../../localization";
 import BackButton from "../../../components/BackButton";
 import { images } from "../../../constants/assets";
 import axios from "axios";
-import { API_BASE_URL } from "@env";
 
 export default function ForgotPasswordScreen() {
   const router = useRouter();
   const { email: emailParam } = useLocalSearchParams();
-  
+  const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL;
   const [email, setEmail] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [message, setMessage] = useState<string>("");

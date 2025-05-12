@@ -15,13 +15,13 @@ import i18n from "../../localization";
 import BackButton from "../../../components/BackButton";
 import { images } from "../../../constants/assets";
 import GoogleSignInButton from "../../../components/GoogleSignInButton";
-import { API_BASE_URL } from '@env';
+
 
 export default function SignInScreen() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
-
+  const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL;
   const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());

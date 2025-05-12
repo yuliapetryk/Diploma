@@ -18,7 +18,7 @@ import { useRouter, useFocusEffect } from "expo-router";
 import i18n from "../../localization";
 import { images } from "../../../constants/assets";
 import BackButton from "../../../components/BackButton";
-import { API_BASE_URL } from '@env';
+
 import * as SecureStore from "expo-secure-store";
 import Animated, {
   useSharedValue,
@@ -34,7 +34,7 @@ export default function FormScreen() {
   const [loadingMessage, setLoadingMessage] = useState("");
   const [userName, setUserName] = useState<string | null>(null);
   const router = useRouter();
-
+  const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL;
   const penguinSize = useSharedValue(120);
 
 
@@ -85,7 +85,7 @@ export default function FormScreen() {
     setLoadingMessage(i18n.t("loading_message"));
 
     try {
-      console.log("API URL:", `${API_BASE_URL}/api/analyze`);
+      console.log("API URL:", API_BASE_URL);
       const response = await axios.post(`${API_BASE_URL}/api/analyze`, {
         text: text.trim(),
         language: i18n.locale
