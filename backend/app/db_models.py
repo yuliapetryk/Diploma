@@ -23,7 +23,7 @@ class User(Base):
     auth_provider = Column(String, default="local")
     reset_token = Column(String, nullable=True)
 
-    mood_logs = relationship("MoodLog", back_populates="user")
+    diary_entries = relationship("DiaryEntry", back_populates="user")
 
 
 class TipType(str, Enum):
@@ -78,25 +78,14 @@ class Emotion(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 
-class MoodLog(Base):
-    __tablename__ = "mood_logs"
+class DiaryEntry(Base):
+    __tablename__ = "diary_entries"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    text = Column(String, nullable=False)
+    emotion = Column(String, nullable=False)
+    date = Column(DateTime, default=datetime.utcnow)
+
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
-    text = Column(Text, nullable=False)
-    emotions_detected = Column(JSON, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
 
-    user = relationship("User", back_populates="mood_logs")
-    mood_log_tips = relationship("MoodLogTip", back_populates="mood_log")
-
-
-class MoodLogTip(Base):
-    __tablename__ = "mood_log_tips"
-
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    mood_log_id = Column(UUID(as_uuid=True), ForeignKey("mood_logs.id"), nullable=False)
-    tip_id = Column(UUID(as_uuid=True), ForeignKey("tips.id"), nullable=False)
-
-    mood_log = relationship("MoodLog", back_populates="mood_log_tips")
-    tip = relationship("Tip")
+    user = relationship("User", back_populates="diary_entries")

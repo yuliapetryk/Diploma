@@ -1,0 +1,16 @@
+[
+  {
+    "id": "9f0b2f4d-1234-4f56-89ab-cdef01234567",
+    "email": "user@e.com",
+    "name": "John",
+    "password": "pass",
+    "sex": "male"
+  },
+  {
+    "id": "7d8b2c5e-6789-4c34-9ab2-123456789abc",
+    "email": "yulia@gmail.com",
+    "name": "Юлія",
+    "password": "qq",
+    "sex": "female"
+  }
+]
