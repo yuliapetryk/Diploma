@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Animated } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, Animated, StyleSheet } from 'react-native';
 
 interface BreathingExerciseProps {
   title: string;
@@ -10,63 +10,104 @@ interface BreathingExerciseProps {
   cycles: number;
 }
 
-const BreathingExerciseCard: React.FC<BreathingExerciseProps> = ({
+const BreathingExercise: React.FC<BreathingExerciseProps> = ({
   title,
   description,
   inhale_duration,
   hold_duration,
   exhale_duration,
-  cycles
+  cycles,
 }) => {
-  const [phase, setPhase] = useState('Inhale');
-  const [cycleCount, setCycleCount] = useState(1);
-  const scale = new Animated.Value(1);
+  const [running, setRunning] = useState(false);
+  const [cycleCount, setCycleCount] = useState(0);
+  const [phase, setPhase] = useState<'inhale' | 'hold' | 'exhale'>('inhale');
+  const size = useState(new Animated.Value(100))[0];
+
+  const startExercise = () => {
+    if (!running) {
+      setRunning(true);
+      setCycleCount(0);
+      setPhase('inhale');
+    }
+  };
+
+  const stopExercise = () => {
+    setRunning(false);
+    setCycleCount(0);
+    size.setValue(100);
+  };
+
+  const animateShape = (newPhase: 'inhale' | 'hold' | 'exhale') => {
+    if (!running) return;
+
+    let newSize = 100;
+    if (newPhase === 'inhale') newSize = 150;
+    if (newPhase === 'exhale') newSize = 80;
+
+    Animated.timing(size, {
+      toValue: newSize,
+      duration: newPhase === 'hold' ? hold_duration * 1000 : inhale_duration * 1000,
+      useNativeDriver: false,
+    }).start(() => {
+      if (!running) return;
+
+      if (newPhase === 'inhale') {
+        setPhase('hold');
+        setTimeout(() => {
+          animateShape('exhale');
+          setPhase('exhale');
+        }, hold_duration * 1000);
+      } else if (newPhase === 'exhale') {
+        setCycleCount((prev) => {
+          const nextCycle = prev + 1;
+          if (nextCycle >= cycles) {
+            stopExercise();
+          } else {
+            setPhase('inhale');
+            animateShape('inhale');
+          }
+          return nextCycle;
+        });
+      }
+    });
+  };
 
   useEffect(() => {
-    const totalDuration = inhale_duration + hold_duration + exhale_duration;
-
-    const loopAnimation = () => {
-      Animated.sequence([
-        Animated.timing(scale, {
-          toValue: 1.5,
-          duration: inhale_duration * 1000,
-          useNativeDriver: true,
-        }),
-        Animated.delay(hold_duration * 1000),
-        Animated.timing(scale, {
-          toValue: 1,
-          duration: exhale_duration * 1000,
-          useNativeDriver: true,
-        }),
-      ]).start(() => {
-        if (cycleCount < cycles) {
-          setCycleCount((prev) => prev + 1);
-          loopAnimation();
-        }
-      });
-    };
-
-    loopAnimation();
-  }, [cycleCount]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setPhase((prev) =>
-        prev === 'Inhale' ? 'Hold' : prev === 'Hold' ? 'Exhale' : 'Inhale'
-      );
-    }, inhale_duration * 1000);
-    return () => clearInterval(interval);
-  }, [inhale_duration, hold_duration, exhale_duration]);
+    if (running && phase === 'inhale') {
+      animateShape('inhale');
+    }
+  }, [running]);
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.description}>{description}</Text>
 
-      <Animated.View style={[styles.circle, { transform: [{ scale }] }]} />
+      <Animated.View
+        style={[
+          styles.shape,
+          {
+            width: size,
+            height: size,
+            backgroundColor: phase === 'inhale' ? '#798bd0' : phase === 'hold' ? '#555' : '#b7f5e3',
+          },
+        ]}
+      />
 
-      <Text style={styles.phase}>{phase}</Text>
-      <Text style={styles.counter}>Cycle {cycleCount} of {cycles}</Text>
+      <Text style={styles.phaseText}>{`Phase: ${phase}`}</Text>
+      <Text style={styles.cycleText}>{`Cycle: ${cycleCount} / ${cycles}`}</Text>
+
+      <View style={styles.buttonContainer}>
+        {!running ? (
+          <TouchableOpacity style={styles.button} onPress={startExercise}>
+            <Text style={styles.buttonText}>Start</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity style={styles.button} onPress={stopExercise}>
+            <Text style={styles.buttonText}>Stop</Text>
+          </TouchableOpacity>
+        )}
+      </View>
     </View>
   );
 };
@@ -74,37 +115,46 @@ const BreathingExerciseCard: React.FC<BreathingExerciseProps> = ({
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    marginVertical: 20,
+    padding: 20,
   },
   title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 5,
-    color: '#333',
+    fontSize: 20,
+    fontWeight: '600',
+    marginBottom: 10,
   },
   description: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 15,
+    fontSize: 16,
+    marginBottom: 20,
     textAlign: 'center',
   },
-  circle: {
-    width: 100,
-    height: 100,
+  shape: {
     borderRadius: 50,
-    backgroundColor: '#798bd0',
-    marginBottom: 15,
+    marginBottom: 20,
   },
-  phase: {
+  phaseText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#555',
     marginBottom: 5,
   },
-  counter: {
+  cycleText: {
     fontSize: 14,
-    color: '#888',
+    marginBottom: 15,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 10,
+  },
+  button: {
+    backgroundColor: '#798bd0',
+    padding: 10,
+    borderRadius: 5,
+    margin: 5,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
   },
 });
 
-export default BreathingExerciseCard;
+export default BreathingExercise;

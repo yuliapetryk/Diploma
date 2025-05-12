@@ -28,7 +28,7 @@ def predict_emotions(text: str, db: Session, language: str = 'uk'):
     scores = {LABELS[i]: probs[i].item() for i in range(len(LABELS))}
     sorted_emotions = sorted(scores.items(), key=lambda x: x[1], reverse=True)
 
-    print("\n🔹 Detected Emotion Scores:")
+    print("\n Detected Emotion Scores:")
     for emotion, score in sorted_emotions:
         print(f"{emotion}: {score:.4f}")
 
@@ -48,7 +48,7 @@ def predict_emotions(text: str, db: Session, language: str = 'uk'):
                 "id": str(t.id),
                 "title": t.title,
                 "description": t.description,
-                "type": t.type.value  # <-- type is inside the data
+                "type": t.type.value
             } for t in tips]
             results.append({
                 "emotion": emotion.name,
