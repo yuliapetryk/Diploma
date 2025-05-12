@@ -76,40 +76,64 @@ export default function FormScreen() {
     height: penguinSize.value,
   }));
 
-  const handleSubmit = async () => {
-    if (!text.trim()) {
+ const handleSubmit = async () => {
+  if (!text.trim()) {
+    console.warn("No text provided for analysis.");
+    return;
+  }
+
+  setLoading(true);
+  setLoadingMessage(i18n.t("loading_message"));
+
+  try {
+    console.log("API URL:", API_BASE_URL);
+    
+    const user_id = await SecureStore.getItemAsync("user_id");
+
+    if (!user_id) {
+      console.error("User ID not found in SecureStore");
+      alert("Please log in to save your diary entry.");
+      setLoading(false);
       return;
     }
 
-    setLoading(true);
-    setLoadingMessage(i18n.t("loading_message"));
+    const response = await axios.post(`${API_BASE_URL}/api/analyze`, {
+      text: text.trim(),
+      language: i18n.locale,
+      user_id: user_id,
+    });
+
+    console.log("Response from API:", response.data);
+
+    const result = response.data?.emotions;
+    if (!result || result.length === 0) {
+      console.warn("No emotions detected.");
+      alert("No emotions were detected. Try with a different input.");
+      setLoading(false);
+      return;
+    }
+
+    setText("");
+    Keyboard.dismiss();
+    setLoading(false);
+    setLoadingMessage("");
 
     try {
-      console.log("API URL:", API_BASE_URL);
-      const response = await axios.post(`${API_BASE_URL}/api/analyze`, {
-        text: text.trim(),
-        language: i18n.locale
-      });
-
-
-      const result = response.data?.emotions || "No response.";
-
-      setText("");
-      Keyboard.dismiss();
-      setLoading(false);
-      setLoadingMessage("");
-
       router.push({
         pathname: "/root/tabs/advice",
         params: { result: JSON.stringify(result) },
       });
-
-    } catch (error) {
-      console.error("Submission error:", error);
-      setLoading(false);
-      setLoadingMessage(i18n.t("loading_error_message"));
+    } catch (navigationError) {
+      console.error("Navigation error:", navigationError);
     }
-  };
+  } catch (error) {
+    console.error("Submission error:", error);
+    setLoading(false);
+    setLoadingMessage(i18n.t("loading_error_message"));
+    alert("An error occurred while analyzing. Please try again.");
+  }
+};
+
 
 
   return (

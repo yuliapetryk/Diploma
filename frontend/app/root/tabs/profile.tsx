@@ -198,7 +198,7 @@ const handlePasswordChange = async () => {
 
         <Text style={styles.subHeaderText}>{i18n.t("or_view")}</Text>
 
-        <TouchableOpacity style={styles.button} onPress={() => console.log("Diary")}>
+        <TouchableOpacity style={styles.button} onPress={() => router.push("/root/tabs/diary")}>
           <Text style={styles.buttonText }>{i18n.t("diary")}</Text>
         </TouchableOpacity>
 
