@@ -93,7 +93,6 @@ const WritingExerciseList: React.FC = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 10,
     },
     title: {
         fontSize: 20,
@@ -109,9 +108,9 @@ const styles = StyleSheet.create({
         width: "90%",
         maxWidth: 400,
         borderRadius: 20,
-        padding: 20,
+        paddingTop: 20,
+        paddingBottom:15,
         alignItems: "center",
-        marginTop: 10,
     },
     subtitle: {
         fontSize: 12,

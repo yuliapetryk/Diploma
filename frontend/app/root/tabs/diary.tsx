@@ -5,8 +5,8 @@ import BackButton from "../../../components/BackButton";
 import { format, parseISO } from 'date-fns';
 import i18n from "../../localization";
 import DiaryCalendar from "../../../components/DiaryCalendar";
-import WritingExerciseList from "@/components/WritingExerciseList";
 import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 
 type DiaryEntry = {
   date: string;
@@ -60,6 +60,26 @@ const DiaryScreen = () => {
 
   return (
     <LinearGradient colors={["#b7f5e3", "#798bd0"]} style={styles.container}>
+      <View
+        style={{
+          width: "80%",
+          maxWidth: 400,
+          height: 70,
+          borderRadius: 40,
+          flexDirection: "row",
+          justifyContent: "flex-end",
+          alignItems: "flex-end",
+          paddingHorizontal: 15,
+          alignSelf: "flex-end",
+          marginTop: 20,
+          marginRight: 20,
+          gap: 10,
+        }}
+      >
+        <TouchableOpacity onPress={() => router.push("/root/tabs/form")}>
+          <Ionicons name="create-outline" size={24} color="black" />
+        </TouchableOpacity>
+      </View>
       <View style={styles.title_container}>
         <Text style={styles.title}>{i18n.t("my_diary")}</Text>
         <Text style={styles.subtitle}>{i18n.t("personal_diary_space")}</Text>
@@ -123,7 +143,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start",
     alignItems: "center",
-    paddingTop: 50,
   },
   content: {
     width: "90%",
@@ -139,7 +158,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 20,
     alignItems: "center",
-    marginTop: 20,
   },
   title: {
     fontSize: 20,
