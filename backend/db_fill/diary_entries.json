@@ -12,5 +12,19 @@
     "emotion": "nervousness",
     "date": "2025-05-02T09:45:00",
     "user_id": "7d8b2c5e-6789-4c34-9ab2-123456789abc"
+  },
+  {
+    "id": "3c8e5b23-2f9c-4b2f-89de-7f9c12345678",
+    "text": "I am sad.",
+    "emotion": "sadness",
+    "date": "2025-05-06T09:45:00",
+    "user_id": "7d8b2c5e-6789-4c34-9ab2-123456789abc"
+  },
+  {
+    "id": "3c8e5b23-2f9c-4b2f-89de-7f9c12345644",
+    "text": "I am in love. I love the whole world",
+    "emotion": "love",
+    "date": "2025-05-11T09:45:00",
+    "user_id": "7d8b2c5e-6789-4c34-9ab2-123456789abc"
   }
 ]
