@@ -7,10 +7,17 @@
     "sex": "male"
   },
   {
+    "id": "7d8b2c5e-6789-4c34-9ab2-123456789abb",
+    "email": "yulia1@gmail.com",
+    "name": "Юлія",
+    "password": "qq",
+    "sex": "female"
+  },
+  {
     "id": "7d8b2c5e-6789-4c34-9ab2-123456789abc",
     "email": "yulia@gmail.com",
     "name": "Юлія",
-    "password": "qq",
+    "password": "password",
     "sex": "female"
   }
 ]

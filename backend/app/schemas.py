@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Optional
+from uuid import UUID
 
 from pydantic import BaseModel, EmailStr
 
@@ -78,6 +79,18 @@ class TipOut(BaseModel):
     class Config:
         orm_mode = True
 
+class WritingExerciseCreate(BaseModel):
+    text: str
+    user_id: UUID
+
+class WritingExerciseEntrySchema(BaseModel):
+    id: UUID
+    text: str
+    date: datetime
+    user_id: UUID
+
+    class Config:
+        orm_mode = True
 
 class TextInput(BaseModel):
     text: str

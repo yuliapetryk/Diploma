@@ -5,6 +5,8 @@ import BackButton from "../../../components/BackButton";
 import { format, parseISO } from 'date-fns';
 import i18n from "../../localization";
 import DiaryCalendar from "../../../components/DiaryCalendar";
+import WritingExerciseList from "@/components/WritingExerciseList";
+import { useRouter } from "expo-router";
 
 type DiaryEntry = {
   date: string;
@@ -14,40 +16,40 @@ type DiaryEntry = {
 };
 
 const emotionColors: { [key: string]: string } = {
-  admiration: '#FFD700',       // Golden Yellow
-  amusement: '#FFA500',        // Orange
-  anger: '#FF4500',            // Red-Orange
-  annoyance: '#FF6347',        // Tomato Red
-  approval: '#32CD32',         // Lime Green
-  caring: '#FFB6C1',           // Light Pink
-  confusion: '#DAA520',        // Goldenrod
-  curiosity: '#87CEEB',        // Sky Blue
-  desire: '#FF69B4',           // Hot Pink
-  disappointment: '#A9A9A9',   // Dark Gray
-  disapproval: '#8B0000',      // Dark Red
-  disgust: '#556B2F',          // Olive Green
-  embarrassment: '#FFB5C5',    // Light Pink
-  excitement: '#FF8C00',       // Dark Orange
-  fear: '#4B0082',             // Indigo
-  gratitude: '#7FFF00',        // Chartreuse
-  grief: '#696969',            // Dim Gray
-  joy: '#FFD700',              // Golden Yellow
-  love: '#FF1493',             // Deep Pink
-  nervousness: '#D2691E',      // Chocolate
-  optimism: '#00FF7F',         // Spring Green
-  pride: '#4682B4',            // Steel Blue
-  realization: '#00BFFF',      // Deep Sky Blue
-  relief: '#98FB98',           // Pale Green
-  remorse: '#8B4513',          // Saddle Brown
-  sadness: '#4169E1',          // Royal Blue
-  surprise: '#FF00FF',         // Magenta
-  neutral: '#808080'           // Gray
+  admiration: '#FFD700',
+  amusement: '#FFA500',
+  anger: '#FF4500',
+  annoyance: '#FF6347',
+  approval: '#32CD32',
+  caring: '#FFB6C1',
+  confusion: '#DAA520',
+  curiosity: '#87CEEB',
+  desire: '#FF69B4',
+  disappointment: '#A9A9A9',
+  disapproval: '#8B0000',
+  disgust: '#556B2F',
+  embarrassment: '#FFB5C5',
+  excitement: '#FF8C00',
+  fear: '#4B0082',
+  gratitude: '#7FFF00',
+  grief: '#696969',
+  joy: '#FFD700',
+  love: '#FF1493',
+  nervousness: '#D2691E',
+  optimism: '#00FF7F',
+  pride: '#4682B4',
+  realization: '#00BFFF',
+  relief: '#98FB98',
+  remorse: '#8B4513',
+  sadness: '#4169E1',
+  surprise: '#FF00FF',
+  neutral: '#808080'
 };
-
 
 const DiaryScreen = () => {
   const [selectedEntry, setSelectedEntry] = useState<DiaryEntry | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const router = useRouter();
 
   const handleSelectDate = (entry: DiaryEntry | null) => {
     if (entry) {
@@ -66,6 +68,15 @@ const DiaryScreen = () => {
       <View style={styles.content}>
         <DiaryCalendar onSelectDate={handleSelectDate} />
       </View>
+      <View style={styles.title_container}>
+        <Text style={styles.subtitle}>{i18n.t("writing_exercises_title")}</Text>
+      </View>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => router.push("/root/tabs/writing-exercise-list")}
+      >
+        <Text style={styles.buttonText}>{i18n.t("writing_exercises")}</Text>
+      </TouchableOpacity>
 
       <Modal
         animationType="slide"
@@ -100,8 +111,6 @@ const DiaryScreen = () => {
           </LinearGradient>
         </View>
       </Modal>
-
-      {/* Back Button */}
       <View style={styles.backButtonContainer}>
         <BackButton />
       </View>
@@ -122,7 +131,6 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.3)",
     borderRadius: 20,
     alignItems: "center",
-    marginBottom: 20,
     padding: 15
   },
   title_container: {
@@ -196,6 +204,23 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     fontFamily: 'Montserrat_400Regular',
     textAlign: 'center',
+  },
+  button: {
+    backgroundColor: "transparent",
+    borderRadius: 25,
+    paddingVertical: 12,
+    alignItems: "center",
+    paddingHorizontal: 30,
+    borderColor: "#5661b3",
+    borderWidth: 1,
+  },
+  buttonText: {
+    color: "#5661b3",
+    fontSize: 14,
+    textTransform: "uppercase",
+    fontFamily: "Montserrat_600SemiBold",
+    opacity: 1,
+    textAlign: "center",
   },
   descriptionText: {
     fontSize: 14,

@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
 from app.database import engine, Base, create_db, SessionLocal
-from app.db_models import Emotion, Tip, BreathingExercise, User, DiaryEntry
+from app.db_models import Emotion, Tip, BreathingExercise, User, DiaryEntry, WritingExerciseEntry
 import json
 from sqlalchemy.orm import Session
 from uuid import uuid4
@@ -13,7 +13,7 @@ TIPS_JSON_PATH = "db_fill/tips.json"
 BREATHING_JSON_PATH = "db_fill/breathing_exercises.json"
 DIARY_JSON_PATH = "db_fill/diary_entries.json"
 USERS_JSON_PATH = "db_fill/users.json"
-
+WRITING_ENTRIES_JSON_PATH = "db_fill/writing_exercise_notes.json"
 
 # Load JSON data from file
 def load_json_data(file_path):
@@ -193,6 +193,29 @@ def seed_diary_entries():
     finally:
         db.close()
 
+def seed_writing_entries():
+    db: Session = SessionLocal()
+    entries = load_json_data(WRITING_ENTRIES_JSON_PATH)
+
+    try:
+        for entry_data in entries:
+            existing = db.query(WritingExerciseEntry).filter(WritingExerciseEntry.id == entry_data["id"]).first()
+            if not existing:
+                new_entry = WritingExerciseEntry(
+                    id=entry_data["id"],
+                    text=entry_data["text"],
+                    date=entry_data["date"],
+                    user_id=entry_data["user_id"]
+                )
+                db.add(new_entry)
+
+        db.commit()
+        print(f"{len(entries)} writing entries added to the database.")
+    except Exception as e:
+        db.rollback()
+        print("Failed to add writing entries:", e)
+    finally:
+        db.close()
 
 if __name__ == "__main__":
     print(" Dropping all tables...")
@@ -210,4 +233,5 @@ if __name__ == "__main__":
     seed_tips()
     seed_breathing_exercises()
     seed_diary_entries()
+    seed_writing_entries()
     print(" All data seeded successfully!")

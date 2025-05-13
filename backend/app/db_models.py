@@ -24,6 +24,7 @@ class User(Base):
     reset_token = Column(String, nullable=True)
 
     diary_entries = relationship("DiaryEntry", back_populates="user")
+    writing_entries = relationship("WritingExerciseEntry", back_populates="user")
 
 
 class TipType(str, Enum):
@@ -89,3 +90,13 @@ class DiaryEntry(Base):
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
 
     user = relationship("User", back_populates="diary_entries")
+
+class WritingExerciseEntry(Base):
+    __tablename__ = "writing_entries"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    text = Column(Text, nullable=False)
+    date = Column(DateTime, default=datetime.utcnow)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
+
+    user = relationship("User", back_populates="writing_entries")

@@ -17,7 +17,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter, useFocusEffect } from "expo-router";
 import i18n from "../../localization";
 import { images } from "../../../constants/assets";
-import BackButton from "../../../components/BackButton";
 
 import * as SecureStore from "expo-secure-store";
 import Animated, {
@@ -76,64 +75,60 @@ export default function FormScreen() {
     height: penguinSize.value,
   }));
 
- const handleSubmit = async () => {
-  if (!text.trim()) {
-    console.warn("No text provided for analysis.");
-    return;
-  }
-
-  setLoading(true);
-  setLoadingMessage(i18n.t("loading_message"));
-
-  try {
-    console.log("API URL:", API_BASE_URL);
-    
-    const user_id = await SecureStore.getItemAsync("user_id");
-
-    if (!user_id) {
-      console.error("User ID not found in SecureStore");
-      alert("Please log in to save your diary entry.");
-      setLoading(false);
+  const handleSubmit = async () => {
+    if (!text.trim()) {
+      console.warn("No text provided for analysis.");
       return;
     }
 
-    const response = await axios.post(`${API_BASE_URL}/api/analyze`, {
-      text: text.trim(),
-      language: i18n.locale,
-      user_id: user_id,
-    });
-
-    console.log("Response from API:", response.data);
-
-    const result = response.data?.emotions;
-    if (!result || result.length === 0) {
-      console.warn("No emotions detected.");
-      alert("No emotions were detected. Try with a different input.");
-      setLoading(false);
-      return;
-    }
-
-    setText("");
-    Keyboard.dismiss();
-    setLoading(false);
-    setLoadingMessage("");
+    setLoading(true);
+    setLoadingMessage(i18n.t("loading_message"));
 
     try {
-      router.push({
-        pathname: "/root/tabs/advice",
-        params: { result: JSON.stringify(result) },
-      });
-    } catch (navigationError) {
-      console.error("Navigation error:", navigationError);
-    }
-  } catch (error) {
-    console.error("Submission error:", error);
-    setLoading(false);
-    setLoadingMessage(i18n.t("loading_error_message"));
-    alert("An error occurred while analyzing. Please try again.");
-  }
-};
+      console.log("API URL:", API_BASE_URL);
 
+      const user_id = await SecureStore.getItemAsync("user_id");
+
+      if (!user_id) {
+        console.error("User ID not found in SecureStore");
+        setLoading(false);
+        return;
+      }
+
+      const response = await axios.post(`${API_BASE_URL}/api/analyze`, {
+        text: text.trim(),
+        language: i18n.locale,
+        user_id: user_id,
+      });
+
+      console.log("Response from API:", response.data);
+
+      const result = response.data?.emotions;
+      if (!result || result.length === 0) {
+        console.warn("No emotions detected.");
+        setLoading(false);
+        return;
+      }
+
+      setText("");
+      Keyboard.dismiss();
+      setLoading(false);
+      setLoadingMessage("");
+
+      try {
+        router.push({
+          pathname: "/root/tabs/advice",
+          params: { result: JSON.stringify(result) },
+        });
+      } catch (navigationError) {
+        console.error("Navigation error:", navigationError);
+      }
+    } catch (error) {
+      console.error("Submission error:", error);
+      setLoading(false);
+      setLoadingMessage(i18n.t("loading_error_message"));
+    }
+  };
 
 
   return (

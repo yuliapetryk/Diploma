@@ -1,12 +1,14 @@
 from datetime import datetime
 from uuid import uuid4
 
-from fastapi import Depends, APIRouter, Request
+from fastapi import Depends, APIRouter, Request, HTTPException
 from sqlalchemy.orm import Session
 
 from app.database import SessionLocal
-from app.db_models import DiaryEntry, User
+from app.db_models import DiaryEntry, User, WritingExerciseEntry
 from app.model import predict_emotions
+from app.schemas import WritingExerciseCreate, WritingExerciseEntrySchema
+from typing import List
 
 router = APIRouter()
 
@@ -68,3 +70,27 @@ def get_diary_entries(user_id: str, db: Session = Depends(get_db)):
         })
 
     return {"entries": result}
+
+@router.post("/diary/write_exercise")
+async def create_writing_exercise(
+        entry: WritingExerciseCreate,
+        db: Session = Depends(get_db)
+):
+    new_entry = WritingExerciseEntry(
+        id=uuid4(),
+        text=entry.text,
+        date=datetime.utcnow(),
+        user_id=entry.user_id
+    )
+    db.add(new_entry)
+    db.commit()
+    db.refresh(new_entry)
+    return {"message": "Entry created successfully", "entry": new_entry}
+
+
+@router.get("/diary/write_exercises/{user_id}", response_model=List[WritingExerciseEntrySchema])
+def get_writing_exercises(user_id: str, db: Session = Depends(get_db)):
+    entries = db.query(WritingExerciseEntry).filter(WritingExerciseEntry.user_id == user_id).all()
+    if not entries:
+        return []
+    return entries
