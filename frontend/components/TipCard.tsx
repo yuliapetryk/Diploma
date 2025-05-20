@@ -13,6 +13,8 @@ const TipCard: React.FC<TipCardProps> = ({ title, description, type }) => {
       <Text style={styles.advice}>{"Дозволь дати тобі невелику пораду"}</Text>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.description}>{description}</Text>
+      <Text style={styles.title}>{"Щиро сподіваюсь, що це тобі допоможе!"}</Text>
+
     </View>
   );
 };

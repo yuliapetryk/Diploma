@@ -8,4 +8,8 @@ export const penguinImages = {
   "смуток": require("../assets/images/sadness.png"),
   "відраза": require("../assets/images/sadness.png"),
   "нейтральна емоція": require("../assets/images/neutral.png"),
+  "розчарування": require("../assets/images/disappointment.png"),
+  "оптимізм": require("../assets/images/optimism.png"),
+
+
 };

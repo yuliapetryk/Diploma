@@ -2,6 +2,7 @@ from datetime import datetime
 from uuid import uuid4
 
 from fastapi import Depends, APIRouter, Request, HTTPException
+from sqlalchemy import desc
 from sqlalchemy.orm import Session
 
 from app.database import SessionLocal
@@ -40,11 +41,8 @@ async def analyze_text(
 
     if not text:
         return {"error": "Text is required."}
-
-    # Виконуємо аналіз незалежно від user_id
     result = predict_emotions(text, db, language)
 
-    # Якщо в запиті є user_id — пробуємо зберегти сесію
     if user_id:
         user = db.query(User).filter(User.id == user_id).first()
         if user:
@@ -58,7 +56,6 @@ async def analyze_text(
                 )
                 db.add(entry)
             db.commit()
-        # якщо user_id не знайдено — просто ігноруємо збереження
 
     return {"emotions": result}
 
@@ -93,9 +90,18 @@ async def create_writing_exercise(
     return {"message": "Entry created successfully", "entry": new_entry}
 
 
-@router.get("/diary/write_exercises/{user_id}", response_model=List[WritingExerciseEntrySchema])
-def get_writing_exercises(user_id: str, db: Session = Depends(get_db)):
-    entries = db.query(WritingExerciseEntry).filter(WritingExerciseEntry.user_id == user_id).all()
-    if not entries:
-        return []
+@router.get(
+    "/diary/write_exercises/{user_id}",
+    response_model=List[WritingExerciseEntrySchema]
+)
+def get_writing_exercises(
+        user_id: str,
+        db: Session = Depends(get_db),
+):
+    entries = (
+        db.query(WritingExerciseEntry)
+        .filter(WritingExerciseEntry.user_id == user_id)
+        .order_by(desc(WritingExerciseEntry.date))
+        .all()
+    )
     return entries

@@ -88,7 +88,7 @@ export default {
   remorse: "докори сумління",
   sadness: "смуток",
   surprise: "подив",
-  neutral: "нейтральна емоція",
+  neutral: "нервозність",
   main_emotion_recognized: "Результат аналізу емоцій",
   the_main_emotion_we_recognized: "Основна емоція, яку ми виявили в описі, це: {{mainEmotion}}",
   we_also_found_notes_of: "Також присутні такі нотки, як: {{secondEmotion}} та {{thirdEmotion}}",
@@ -111,5 +111,6 @@ export default {
   writing_exercises_title:"Також ви можете пригадати думки, якими ділилися з нами",
   my_notes:"Ваші думки",
   my_note_desc:"Це ці переживання і почуття, якими ви ділились під час виконання вправ",
-  show_more:"Показати більше"
+  show_more:"Показати більше",
+  no_notes_found: "Завантажую..."
 };

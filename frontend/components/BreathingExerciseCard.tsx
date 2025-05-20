@@ -183,7 +183,7 @@ const imageSource: ImageSourcePropType =
 
 const styles = StyleSheet.create({
   container: { padding: 15, borderTopColor: "black", borderTopWidth: 1, justifyContent: "center", alignItems: "center" },
-  title: { fontSize: 20, fontWeight: "600", color: "#000", marginBottom: 10, letterSpacing: 1, fontFamily: "Montserrat_600SemiBold" },
+  title: { fontSize: 20, fontWeight: "600", color: "#000", marginBottom: 10, letterSpacing: 1, fontFamily: "Montserrat_600SemiBold", textAlign:"center" },
   description: { fontSize: 16, fontWeight: "300", color: "#000", marginBottom: 30, letterSpacing: 1, fontFamily: "Montserrat_400Regular" },
   lotus: { width: 100, height: 100, marginBottom: 20, borderRadius: 50 },
   phaseText: { fontSize: 14, fontWeight: "300", textAlign: "center", color: "#000", marginBottom: 10, textTransform: "uppercase", letterSpacing: 1, fontFamily: "Montserrat_400Regular", marginTop:20 },

@@ -15,7 +15,7 @@ interface WritingExerciseEntry {
 const WritingExerciseList: React.FC = () => {
     const [entries, setEntries] = useState<WritingExerciseEntry[]>([]);
     const [visibleEntries, setVisibleEntries] = useState<WritingExerciseEntry[]>([]);
-    const [itemsToShow, setItemsToShow] = useState(5);
+    const [itemsToShow, setItemsToShow] = useState(3);
     const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL;
 
     useEffect(() => {
@@ -29,7 +29,7 @@ const WritingExerciseList: React.FC = () => {
 
                 const response = await axios.get(`${API_BASE_URL}/api/diary/write_exercises/${user_id}`);
                 setEntries(response.data);
-                setVisibleEntries(response.data.slice(0, 5));
+                setVisibleEntries(response.data.slice(0, 3));
             } catch (error) {
                 console.error("Error fetching writing exercises:", error);
                 Alert.alert("Error", "Could not load your notes.");
