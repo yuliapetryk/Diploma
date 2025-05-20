@@ -21,7 +21,7 @@ export default function SignInScreen() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
-  const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL;
+  const API_BASE_URL = "http://192.168.1.107:5000";
   const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
@@ -34,6 +34,7 @@ export default function SignInScreen() {
     }
 
     try {
+      console.log(`${API_BASE_URL}/users/check-email`)
       const response = await axios.get(`${API_BASE_URL}/users/check-email`, {
         params: { email },
       });

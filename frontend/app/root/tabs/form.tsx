@@ -17,6 +17,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter, useFocusEffect } from "expo-router";
 import i18n from "../../localization";
 import { images } from "../../../constants/assets";
+import BackButton from "../../../components/BackButton";
 
 import * as SecureStore from "expo-secure-store";
 import Animated, {
@@ -134,6 +135,34 @@ export default function FormScreen() {
   return (
     <LinearGradient colors={["#b7f5e3", "#798bd0"]} style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
+        <TouchableOpacity
+          style={{
+            position: "absolute",
+            top: Platform.OS === "ios" ? 50 : 20,
+            left: 20,
+            zIndex: 10,
+            padding: 8,
+            backgroundColor: "transparent",
+            borderRadius: 25,
+            paddingVertical: 12,
+            alignItems: "center",
+            paddingHorizontal: 30,
+            marginVertical: 8,
+            borderColor: "red",
+            borderWidth: 1,
+          }}
+          onPress={() => router.push("/root/tabs/sos")}
+        >
+          <Text style={{
+            color: "red",
+            fontSize: 14,
+            textTransform: "uppercase",
+            fontFamily: "Montserrat_600SemiBold",
+            opacity: 1,
+            textAlign: "center",
+          }}>SOS</Text>
+        </TouchableOpacity>
+
         <View
           style={{
             width: "80%",

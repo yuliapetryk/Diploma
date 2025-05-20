@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TouchableOpacity, Animated, StyleSheet, Easing } from 'react-native';
 import i18n from "../app/localization";
 import { images } from "../constants/assets";
+import type { ImageSourcePropType } from 'react-native';
 
 interface BreathingExerciseProps {
   title: string;
@@ -134,14 +135,17 @@ const BreathingExercise: React.FC<BreathingExerciseProps> = ({
   };
 
   useEffect(() => () => clearAllTimeouts(), []);
-
+const imageSource: ImageSourcePropType =
+    title === "Дихання для заземлення"
+      ? images.sunflowerImage
+      : images.lotusImage;
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.description}>{description}</Text>
       {!stopped && (
         <Animated.Image
-          source={images.lotusImage}
+          source={imageSource}
           style={[styles.lotus, {
             opacity,
             transform: [
