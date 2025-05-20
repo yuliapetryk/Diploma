@@ -90,11 +90,7 @@ export default function FormScreen() {
 
       const user_id = await SecureStore.getItemAsync("user_id");
 
-      if (!user_id) {
-        console.error("User ID not found in SecureStore");
-        setLoading(false);
-        return;
-      }
+      
 
       const response = await axios.post(`${API_BASE_URL}/api/analyze`, {
         text: text.trim(),

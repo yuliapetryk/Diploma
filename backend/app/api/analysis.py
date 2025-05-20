@@ -21,6 +21,13 @@ def get_db():
         db.close()
 
 
+from uuid import uuid4
+from datetime import datetime
+from fastapi import APIRouter, Request, Depends
+from sqlalchemy.orm import Session
+
+router = APIRouter()
+
 @router.post("/analyze")
 async def analyze_text(
         request: Request,
@@ -34,28 +41,26 @@ async def analyze_text(
     if not text:
         return {"error": "Text is required."}
 
-    if not user_id:
-        return {"error": "User ID is required."}
-
-    user = db.query(User).filter(User.id == user_id).first()
-    if not user:
-        return {"error": f"User with ID {user_id} does not exist."}
-
+    # Виконуємо аналіз незалежно від user_id
     result = predict_emotions(text, db, language)
 
-    for emotion_data in result:
-        diary_entry = DiaryEntry(
-            id=str(uuid4()),
-            text=text,
-            emotion=emotion_data["emotion"],
-            date=datetime.now(),
-            user_id=user_id
-        )
-        db.add(diary_entry)
+    # Якщо в запиті є user_id — пробуємо зберегти сесію
+    if user_id:
+        user = db.query(User).filter(User.id == user_id).first()
+        if user:
+            for emotion_data in result:
+                entry = DiaryEntry(
+                    id=str(uuid4()),
+                    text=text,
+                    emotion=emotion_data["emotion"],
+                    date=datetime.now(),
+                    user_id=user_id
+                )
+                db.add(entry)
+            db.commit()
+        # якщо user_id не знайдено — просто ігноруємо збереження
 
-    db.commit()
     return {"emotions": result}
-
 
 @router.get("/diary/{user_id}")
 def get_diary_entries(user_id: str, db: Session = Depends(get_db)):
